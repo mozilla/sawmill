@@ -22,7 +22,7 @@ var config = {
 var queue = new SqsQueueParallel(config);
 
 queue.on("message", function(m) {
-  workers(m, function(err) {
+  workers(m.message.MessageId, m.data, function(err) {
     if (err) {
       console.log(err);
       return m.next();
