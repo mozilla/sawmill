@@ -1,5 +1,5 @@
 module.exports = function(config) {
-  return function(data, cb) {
+  return function(id, data, cb) {
     process.nextTick(cb);
   }
 }
