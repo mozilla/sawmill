@@ -5,7 +5,7 @@ module.exports = function(notifier_messager) {
       notifier_messager.sendMessage({
         event_type: NOTIFIER_EVENT_TYPE,
         data: {
-          username: event.data.username,
+          username: event.data.user,
           email: event.data.email
         }
       }, cb);
