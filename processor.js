@@ -29,10 +29,6 @@ var config = {
 };
 var queue = new SqsQueueParallel(config);
 
-var AWS = require("aws-sdk");
-var sqs = new AWS.SQS({
-});
-
 queue.on("message", function(m) {
   workers(m.message.MessageId, m.data, function(err) {
     if (err) {

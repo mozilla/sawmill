@@ -10,6 +10,7 @@ var Messager = function Messager(config) {
 };
 
 Messager.prototype.sendMessage = function(data, cb) {
+console.log(data);
   this._sqs.sendMessage({
     MessageBody: JSON.stringify(data),
     QueueUrl: this._queueUrl,
