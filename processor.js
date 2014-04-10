@@ -3,9 +3,10 @@ var url = require("url");
 var worker = require("./worker");
 var redis_url = url.parse(process.env.REDIS_CONNECTION_STRING);
 var redis_config = {
-  port: redis_url.port
+  port: redis_url.port,
   host: redis_url.hostname,
-  auth: redis_url.auth
+  auth: redis_url.auth,
+  db: redis_url.path.substring(1)
 };
 var archiver_config = {
   connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING

@@ -7,6 +7,9 @@ module.exports = function(config) {
   if (config.auth) {
     redis_client.auth(config.auth);
   }
+  if (config.db) {
+    redis_client.select(config.db);
+  }
 
   return function(id, event, cb) {
     // Try to retrieve a record for a given userID
