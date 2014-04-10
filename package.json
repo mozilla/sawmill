@@ -12,10 +12,12 @@
   "author": "",
   "license": "MPL-2.0",
   "dependencies": {
-    "aws-sdk": "^2.0.0-rc13",
-    "sqs-queue-parallel": "^0.1.3",
     "async": "^0.6.2",
-    "pg.js": "^2.11.1"
+    "aws-sdk": "^2.0.0-rc13",
+    "bucheron": "^0.1.1",
+    "pg.js": "^2.11.1",
+    "redis": "^0.10.1",
+    "sqs-queue-parallel": "^0.1.3"
   },
   "devDependencies": {
     "jstest": "^1.0.5"
