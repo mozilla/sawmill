@@ -4,9 +4,9 @@ var BACKWARDS_COMPATIBILITY_MAP = {
 };
 
 module.exports = function(id, event, cb) {
-  Object.keys(event).forEach(function(key) {
-    if (event.hasOwnProperty(key) && BACKWARDS_COMPATIBILITY_MAP[key]) {
-      event[BACKWARDS_COMPATIBILITY_MAP[key]] = event[key];
+  Object.keys(event.data).forEach(function(key) {
+    if (event.data.hasOwnProperty(key) && BACKWARDS_COMPATIBILITY_MAP[key]) {
+      event.data[BACKWARDS_COMPATIBILITY_MAP[key]] = event.data[key];
     }
   });
   process.nextTick(cb);

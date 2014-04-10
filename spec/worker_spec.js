@@ -9,35 +9,41 @@ JS.Test.describe('Workers', function() { with(this) {
 
     it('Fixes user_id', function(resume) { with(this) {
       var event = {
-        user_id: 123
+        data: {
+          user_id: 123
+        }
       };
 
       worker( null, event, function() {
-        assertEqual(123, event.userId);
+        assertEqual(123, event.data.userId);
         resume();
       });
     }});
 
     it('Fixes user', function(resume) { with(this) {
       var event = {
-        user: "webmaker"
+        data: {
+          user: "webmaker"
+        }
       };
 
       worker( null, event, function() {
-        assertEqual("webmaker", event.username);
+        assertEqual("webmaker", event.data.username);
         resume();
       });
     }});
 
     it('Doesn\'t touch valid properties', function(resume) { with(this) {
       var event = {
-        username: "webmaker",
-        userId: 123
+        data: {
+          username: "webmaker",
+          userId: 123
+        }
       };
 
       worker( null, event, function() {
-        assertEqual("webmaker", event.username);
-        assertEqual(123, event.userId);
+        assertEqual("webmaker", event.data.username  );
+        assertEqual(123, event.data.userId);
         resume();
       });
     }});
