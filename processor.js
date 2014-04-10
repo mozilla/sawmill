@@ -12,8 +12,8 @@ var notifier_messager = require("./messager/messager")({
 });
 
 var workers = async.applyEachSeries([
-  worker.backwards_compatibility,
   worker.archiver(archiver_config),
+  worker.backwards_compatibility,
   worker.send_event_host_email(notifier_messager),
   worker.send_mofo_staff_email(notifier_messager),
   worker.send_new_user_email(notifier_messager),

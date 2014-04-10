@@ -1,6 +1,5 @@
 var BACKWARDS_COMPATIBILITY_MAP = {
   "user_id": "userId",
-  "userID": "userId",
   "user": "username"
 };
 
@@ -10,5 +9,5 @@ module.exports = function(id, event, cb) {
       event[BACKWARDS_COMPATIBILITY_MAP[key]] = event[key];
     }
   });
-  cb();
+  process.nextTick(cb);
 };
