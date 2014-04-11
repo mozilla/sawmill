@@ -2,6 +2,10 @@ var redis = require("redis");
 
 var Bucheron = require("bucheron");
 
+var CONTRIBUTION_EVENTS = [
+  "create_event"
+];
+
 module.exports = function(config) {
   var redis_client = redis.createClient(config.port, config.host);
   if (config.auth) {
@@ -30,7 +34,15 @@ module.exports = function(config) {
           dataArray.push(data[key]);
         }
       });
-      redis_client.hmset(dataArray, cb);
+      redis_client.hmset(dataArray, function(err) {
+        if ( err ) {
+          return cb(err);
+        }
+        if (CONTRIBUTION_EVENTS.indexOf(event.event_type) === -1) {
+          return cb()
+        }
+        redis_client.sadd(event.data.userId + ":contributions", event.timestamp, cb);
+      });
     });
   };
 };
