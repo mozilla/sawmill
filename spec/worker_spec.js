@@ -47,5 +47,29 @@ JS.Test.describe('Workers', function() { with(this) {
         resume();
       });
     }});
+
+    it('Sets default locale', function(resume) { with(this) {
+      var event = {
+        data: {}
+      };
+
+      worker( null, event, function() {
+        assertEqual('en-US', event.data.locale);
+        resume();
+      });
+    }});
+
+    it('Doesn\'t override another locale', function(resume) { with(this) {
+      var event = {
+        data: {
+          locale: "en-CA"
+        }
+      };
+
+      worker( null, event, function() {
+        assertEqual('en-CA', event.data.locale);
+        resume();
+      });
+    }});
   }});
 }});
