@@ -7,7 +7,8 @@ module.exports = function(notifier_messager) {
         data: {
           username: event.data.username,
           email: event.data.email,
-          eventId: event.data.eventId
+          eventId: event.data.eventId,
+          locale: event.data.locale
         }
       }, cb);
     } else {

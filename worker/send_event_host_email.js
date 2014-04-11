@@ -6,7 +6,8 @@ module.exports = function(notifier_messager) {
         event_type: NOTIFIER_EVENT_TYPE,
         data: {
           username: event.data.username,
-          email: event.data.email
+          email: event.data.email,
+          locale: event.data.locale
         }
       }, cb);
     } else {
