@@ -1,48 +1,58 @@
 var JS  = require('jstest'),
-    Profile = require('../');
+    Bucheron = require('../');
 
-JS.Test.describe('Profile', function() { with(this) {
+JS.Test.describe('Bucheron', function() { with(this) {
   it('exists', function() { with(this) {
-    assert(Profile);
+    assert(Bucheron);
+  }});
+
+  it('has Contributor', function() { with(this) {
+    assert(Bucheron.Contributor);
+  }});
+
+  it('has getContributionInfo', function() { with(this) {
+    assert(Bucheron.getContributionInfo);
   }});
 
   describe('Default Values', function() { with(this) {
-    var p = new Profile(),
-        data = p.getData();
+
+    before(function() { with(this){
+      this.profileData = (new Bucheron.Contributor()).getData();
+    }});
 
     it('Defaults lastActive', function() { with(this) {
-      assertNot(data.lastActive);
-      assertEqual(data.lastActive, null);
+      assertNot(profileData.lastActive);
+      assertEqual(profileData.lastActive, null);
     }});
     it('Defaults firstContribution', function() { with(this) {
-      assertNot(data.firstContribution);
-      assertEqual(data.firstContribution, null);
+      assertNot(profileData.firstContribution);
+      assertEqual(profileData.firstContribution, null);
     }});
     it('Defaults latestContribution', function() { with(this) {
-      assertNot(data.latestContribution);
-      assertEqual(data.latestContribution, null);
+      assertNot(profileData.latestContribution);
+      assertEqual(profileData.latestContribution, null);
     }});
     it('Defaults contributor', function() { with(this) {
-      assertNot(data.contributor);
-      assertEqual(data.contributor, false);
+      assertNot(profileData.contributor);
+      assertEqual(profileData.contributor, false);
     }});
     it('Defaults eventHost', function() { with(this) {
-      assertNot(data.eventHost);
-      assertEqual(data.eventHost, false);
+      assertNot(profileData.eventHost);
+      assertEqual(profileData.eventHost, false);
     }});
     it('Defaults createdAt', function() { with(this) {
-      assertNot(data.lastActive);
-      assertEqual(data.lastActive, null);
+      assertNot(profileData.lastActive);
+      assertEqual(profileData.lastActive, null);
     }});
     it('Defaults deletedAt', function() { with(this) {
-      assertNot(data.deletedAt);
-      assertEqual(data.deletedAt, null);
+      assertNot(profileData.deletedAt);
+      assertEqual(profileData.deletedAt, null);
     }});
   }});
 
   describe('updates', function() { with(this) {
     before(function() { with(this) {
-      this.p = Profile({
+      this.p = Bucheron.Contributor({
         lastActive: "2014-01-01T00:00:00.000Z"
       });
     }});
