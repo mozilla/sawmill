@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "^0.6.2",
     "aws-sdk": "^2.0.0-rc13",
-    "bucheron": "^0.1.1",
+    "bucheron": "^0.2.0",
     "pg.js": "^2.11.1",
     "redis": "^0.10.1",
     "sqs-queue-parallel": "^0.1.3"
