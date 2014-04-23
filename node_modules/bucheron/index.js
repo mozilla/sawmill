@@ -15,9 +15,29 @@
 */
 
 // event_types that indicate contribution should be added here
+// valid contribution types:
+// * code
+// * content
+// * events
+// * training
+// * community
+// * testing
+// * apis
+//
 var contribution_events = [
-  "create_event"
+  {
+    name: "create_event",
+    type: "events"
+  }
 ];
+
+var getContributionInfo = function(type) {
+  for (var i = contribution_events.length - 1; i >= 0; i--) {
+    if ( contribution_events[i].name === type ) {
+      return contribution_events[i]
+    }
+  }
+};
 
 var profile_update_map = {
   lastActive: function(eventData) {
@@ -26,22 +46,22 @@ var profile_update_map = {
       this.lastActive = eventData.timestamp;
     }
   },
-  firstContribution: function(eventData) {
-    if (contribution_events.indexOf(eventData.event_type) !== -1 &&
+  firstContribution: function(eventData, isContribution) {
+    if (isContribution &&
         new Date(eventData.timestamp).valueOf() <
         (this.firstContribution ? new Date(this.firstContribution).valueOf() : Date.now())) {
       this.firstContribution = eventData.timestamp;
     }
   },
-  latestContribution: function(eventData) {
-    if (contribution_events.indexOf(eventData.event_type) !== -1 &&
+  latestContribution: function(eventData, isContribution) {
+    if (isContribution &&
         new Date(eventData.timestamp).valueOf() >
         (this.latestContribution ? new Date(this.latestContribution).valueOf() : 0)) {
       this.latestContribution = eventData.timestamp;
     }
   },
-  contributor: function(eventData) {
-    if (!this.contributor && contribution_events.indexOf(eventData.event_type) !== -1) {
+  contributor: function(eventData, isContribution) {
+    if (!this.contributor && isContribution) {
       this.contributor = true;
     }
   },
@@ -77,9 +97,10 @@ var Contributor = function Contributor(profileData) {
 };
 
 Contributor.prototype.updateProfile = function(eventData) {
+  var isContribution = !!getContributionInfo(eventData.event_type);
   profile_properties.forEach(function(profile_prop) {
     if ( profile_update_map.hasOwnProperty(profile_prop) ) {
-      profile_update_map[profile_prop].call(this, eventData);
+      profile_update_map[profile_prop].call(this, eventData, isContribution);
     }
   }, this);
 };
@@ -96,6 +117,9 @@ Contributor.prototype.getData = function() {
   };
 };
 
-module.exports = function(profileData) {
-  return new Contributor(profileData);
+module.exports = {
+  getContributionInfo: getContributionInfo,
+  Contributor: function(profileData) {
+    return new Contributor(profileData);
+  }
 };
