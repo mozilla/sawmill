@@ -23,7 +23,7 @@ module.exports = function(config) {
 
       // stripping out falsy values because Redis handles null/undefined as strings
       var data = contributor.getData();
-      var dataArray = [event.data.userId];
+      var dataArray = [event.data.userId + ":profile"];
       Object.keys(data).forEach(function(key) {
         if ( data[key] ) {
           dataArray.push(key);
