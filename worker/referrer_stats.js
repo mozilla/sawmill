@@ -10,7 +10,7 @@ module.exports = function(config) {
   }
 
   return function(id, event, cb) {
-    if (event.event_type !== "create_user") {
+    if (event.event_type !== "create_user" || !event.data.referrer) {
       return process.nextTick(cb);
     }
 
