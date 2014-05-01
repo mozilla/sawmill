@@ -6,7 +6,8 @@ module.exports = function(notifier_messager) {
         event_type: NOTIFIER_EVENT_TYPE,
         data: {
           email: event.data.email,
-          badge: event.data.badge
+          badge: event.data.badge,
+          comment: event.data.comment
         }
       }, cb);
     } else {
