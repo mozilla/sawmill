@@ -4,10 +4,7 @@ module.exports = function(notifier_messager) {
     if (event.event_type === "badge_awarded" && !(event.data.sendEmail === false)) {
       notifier_messager.sendMessage({
         event_type: NOTIFIER_EVENT_TYPE,
-        data: {
-          email: event.data.email,
-          badge: event.data.badge
-        }
+        data: event.data
       }, cb);
     } else {
       process.nextTick(cb);
