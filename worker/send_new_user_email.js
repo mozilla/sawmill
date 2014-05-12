@@ -1,17 +1,13 @@
-module.exports = function(notifier_messager) {
-  var NOTIFIER_EVENT_TYPE = "send_new_user_email";
-  return function(id, event, cb) {
-    if (event.event_type === "create_user" && !(event.data.sendNewUserEmail === false)) {
-      notifier_messager.sendMessage({
-        event_type: NOTIFIER_EVENT_TYPE,
-        data: {
-          username: event.data.username,
-          email: event.data.email,
-          locale: event.data.locale
-        }
-      }, cb);
-    } else {
-      process.nextTick(cb);
-    }
+module.exports = function (sendEmail) {
+  return function (id, event, cb) {
+    sendEmail(event, cb, {
+      eventType: "create_user",
+      sendEmailFlag: "sendNewUserEmail",
+      template: "welcome",
+      from: "help@webmaker.org",
+      to: [event.data.email],
+      subject: "emailTitle",
+      locale: event.data.locale
+    });
   }
-}
+};

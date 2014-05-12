@@ -1,13 +1,13 @@
-module.exports = function(notifier_messager) {
-  var NOTIFIER_EVENT_TYPE = "badge_awarded_send_email";
-  return function(id, event, cb) {
-    if (event.event_type === "badge_awarded" && !(event.data.sendEmail === false)) {
-      notifier_messager.sendMessage({
-        event_type: NOTIFIER_EVENT_TYPE,
-        data: event.data
-      }, cb);
-    } else {
-      process.nextTick(cb);
-    }
-  };
+module.exports = function (sendEmail) {
+  return function (id, event, cb) {
+    sendEmail(event, cb, {
+      eventType: "badge_awarded",
+      sendEmailFlag: "sendEmail",
+      template: "badge_awarded",
+      from: "badges@webmaker.org",
+      to: [event.data.email],
+      subject: "badgesTitle",
+      locale: event.data.locale
+    });
+  }
 };
