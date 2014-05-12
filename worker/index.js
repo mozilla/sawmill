@@ -7,5 +7,6 @@ module.exports = {
   send_mofo_staff_email: require("./send_mofo_staff_email"),
   send_new_user_email: require("./send_new_user_email"),
   sign_up_for_bsd: require("./sign_up_for_bsd"),
-  badge_awarded_send_email: require("./badge_awarded_send_email")
+  badge_awarded_send_email: require("./badge_awarded_send_email"),
+  supermentor_awarded_set_permissions: require("./supermentor_awarded_set_permissions")
 };
