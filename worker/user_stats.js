@@ -12,6 +12,11 @@ module.exports = function(config) {
   }
 
   return function(id, event, cb) {
+
+    if (!event.data.userId) {
+      return cb(null);
+    }
+
     // Try to retrieve a record for a given userID
     redis_client.hgetall( event.data.userId, function(err, profileData) {
       if ( err ) {
