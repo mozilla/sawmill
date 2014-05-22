@@ -28,7 +28,8 @@ var workers = async.applyEachSeries([
   worker.send_mofo_staff_email(notifier_messager),
   worker.send_new_user_email(notifier_messager),
   worker.sign_up_for_bsd(notifier_messager),
-  worker.badge_awarded_send_email(notifier_messager)
+  worker.badge_awarded_send_email(notifier_messager),
+  worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
 ]);
 
 var SqsQueueParallel = require('sqs-queue-parallel');
