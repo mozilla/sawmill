@@ -27,6 +27,7 @@ var workers = async.applyEachSeries([
   worker.send_event_host_email(notifier_messager),
   worker.send_mofo_staff_email(notifier_messager),
   worker.send_new_user_email(notifier_messager),
+  worker.event_mentor_confirmation_email(notifier_messager),
   worker.sign_up_for_bsd(notifier_messager),
   worker.badge_awarded_send_email(notifier_messager),
   worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
