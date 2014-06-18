@@ -1,0 +1,17 @@
+<p>Hi {{ username }},</p>
+
+<p>You have been selected to be a mentor at an upcoming event called <a href="{{ eventUrl }}">{{ eventName }}</a>.</p>
+
+{% if username %}
+<p>If you would like to confirm your attendance as a mentor, <a href="{{ confirmUrlYes }}">click here</a> and sign in as <strong>{{ username }}</strong>.</p>
+{% else %}
+<p>If you would like to confirm your attendance as a mentor, <a href="{{ confirmUrlYes }}">click here</a>. You will need to create a Webmaker account.</p>
+{% endif %}
+
+<p>If you would like to decline your attendance, <a href="{{ confirmUrlNo }}">click here</a>. You may also want to let the organizer know you won't be attending.</p>
+
+<p>Looking forward to seeing you!</p>
+
+<p>{{ organizerUsername }}
+<br>Event Organizer, {{ eventName }}
+<br>Webmaker Events</p>
