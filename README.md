@@ -15,12 +15,17 @@
 
 ### `event_mentor_confirmation_email`
 Include the following data with the hatchet event:
-  `sendEmail`: if true or undefined, an email will be sent. If false, an email will not be sent.
-  `username`: the username of the event mentor, or undefined if no username exists
-  `email`: the email of the event mentor
-  `eventName`: the name of the event
-  `eventUrl`: the url of the event detail page
-  `organizerUsername`: the username of the event organizer
-  `locale`: the locale of the email (defaults to English)
-  `confirmUrlYes`: the URL for positive confirmation of event mentorship with token
-  `confirmUrlNo`: the URL for negative confirmation of event mentorship with token
+
+```js
+{
+  sendEmail: 'if true or undefined, an email will be sent. If false, an email will not be sent.',
+  username: 'the username of the event mentor, or undefined if no username exists',
+  email: 'the email of the event mentor',
+  eventName: 'the name of the event',
+  eventUrl: 'the url of the event detail page',
+  organizerUsername: 'the username of the event organizer',
+  locale: 'the locale of the email (defaults to English)',
+  confirmUrlYes: 'the URL for positive confirmation of event mentorship with token',
+  confirmUrlNo: 'the URL for negative confirmation of event mentorship with token'
+}
+```
