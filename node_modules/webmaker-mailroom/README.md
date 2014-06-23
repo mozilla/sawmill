@@ -58,7 +58,7 @@ If a user/username exists:
   username: "Badge earner's username",
   badgeUrl: "The complete url of the badge, e.g. https://webmaker.org/badges/hive-community-member",
   profileUrl: "The complete url of the user's profile page e.g. https://webmaker.org/user/user123",
-  comments: "The comments included with the approved application"
+  comment: "The comments included with the approved application"
 }
 ```
 
@@ -67,7 +67,7 @@ If a user/username exists:
 {
   badgeUrl: "The complete url of the badge, e.g. https://webmaker.org/badges/hive-community-member",
   signUpUrl: "The complete url where a user can go to sign up for a new badge",
-  comments: "The comments included with the approved application"
+  comment: "The comments included with the approved application"
 }
 ```
 

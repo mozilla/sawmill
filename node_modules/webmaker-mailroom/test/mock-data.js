@@ -26,7 +26,7 @@ module.exports = {
       username: "k88hudson",
       badgeUrl: "https://webmaker.org/badges/hive-community-member",
       profileUrl: "https://webmaker.org/user/k88hudson",
-      comments: "Great job!!"
+      comment: "Great job!!"
     },
     // No username
     {
