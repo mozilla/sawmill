@@ -20,6 +20,15 @@ describe('webmaker-mailroom', function() {
       assert(output2.subject);
     });
 
+    it('should render "hive_badge_awarded"', function() {
+      var output = mailer.render('hive_badge_awarded', data.hive_badge_awarded[0]);
+      var output2 = mailer.render('hive_badge_awarded', data.hive_badge_awarded[1]);
+      assert(output.html);
+      assert(output.subject);
+      assert(output2.html);
+      assert(output2.subject);
+    });
+
   });
 
 });
