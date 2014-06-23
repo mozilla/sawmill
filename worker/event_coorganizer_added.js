@@ -1,25 +1,20 @@
 module.exports = function(lumberyard_messager, mailroom) {
-  var SAWMILL_EVENT = 'hive_badge_awarded';
+  var SAWMILL_EVENT = 'event_coorganizer_added';
   var LUMBERYARD_EVENT = 'mailer';
   var EVENTS_FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
   return function(id, event, cb) {
     var sendEmail = event.data.sendEmail;
-    var username = event.data.username;
     var email = event.data.email;
     var locale = event.data.locale;
-    var badgeUrl = event.data.badgeUrl;
-    var profileUrl = event.data.profileUrl;
-    var signUpUrl = event.data.signUpUrl;
-    var comment = event.data.comment;
+    var data = {
+      username = event.data.username,
+      eventName = event.data.eventName,
+      eventUrl = event.data.eventUrl,
+      eventEditUrl: event.data.eventEditUrl
+    };
 
-    var mail = mailroom.render(SAWMILL_EVENT, {
-      username: username,
-      badgeUrl: badgeUrl,
-      profileUrl:  profileUrl,
-      signUpUrl: signUpUrl,
-      comment: comment
-    }, locale);
+    var mail = mailroom.render(SAWMILL_EVENT, data, locale);
 
     if (event.event_type === SAWMILL_EVENT && !(sendEmail === false)) {
       lumberyard_messager.sendMessage({

@@ -18,6 +18,7 @@ var notifier_messager = require("./messager/messager")({
   region: process.env.AWS_QUEUE_REGION,
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
+var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
   worker.archiver(archiver_config),
@@ -27,10 +28,11 @@ var workers = async.applyEachSeries([
   worker.send_event_host_email(notifier_messager),
   worker.send_mofo_staff_email(notifier_messager),
   worker.send_new_user_email(notifier_messager),
-  worker.event_mentor_confirmation_email(notifier_messager),
+  worker.event_mentor_confirmation_email(notifier_messager, mailroom),
+  worker.event_coorganizer_added(notifier_messager, mailroom),
   worker.sign_up_for_bsd(notifier_messager),
   worker.badge_awarded_send_email(notifier_messager),
-  worker.hive_badge_awarded(notifier_messager),
+  worker.hive_badge_awarded(notifier_messager, mailroom),
   worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
 ]);
 
