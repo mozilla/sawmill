@@ -12,14 +12,14 @@ module.exports = function(lumberyard_messager) {
     var badgeUrl = event.data.badgeUrl;
     var profileUrl = event.data.profileUrl;
     var signUpUrl = event.data.signUpUrl;
-    var comments = event.data.comments;
+    var comment = event.data.comment;
 
     var mail = mailroom.render(SAWMILL_EVENT, {
       username: username,
       badgeUrl: badgeUrl,
       profileUrl:  profileUrl,
       signUpUrl: signUpUrl,
-      comments: comments
+      comment: comment
     }, locale);
 
     if (event.event_type === SAWMILL_EVENT && !(sendEmail === false)) {
