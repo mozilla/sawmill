@@ -1,5 +1,6 @@
 {
   "subject_test": "This is a test",
   "subject_event_mentor_confirmation_email": "Will you mentor for {{ eventName }}?",
+  "subject_hive_badge_awarded": "Congratulations Hive Community Member!",
   "test": "test"
 }

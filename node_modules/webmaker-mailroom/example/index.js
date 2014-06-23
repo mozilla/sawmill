@@ -13,7 +13,7 @@ app.get('/:template', function (req, res) {
   var tests = mockData[req.params.template];
   var separator = '\n<hr>\n';
   if (!tests) {
-    return res.send('');
+    return res.send('You should add some tests to test/mock-data.js');
   }
   var html = tests.map(function (data) {
     var email = mailer.render(req.params.template, data);
