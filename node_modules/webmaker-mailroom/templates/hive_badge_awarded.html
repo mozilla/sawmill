@@ -1,7 +1,9 @@
+{% extends "base/layout.html" %}
+{% block body %}
 <p>Congratulations! You’ve earned the <a href="{{ badgeUrl }}">Hive Community Member</a> badge, which recognizes your “openly networked” contributions to a local Hive, and demonstrates your Connected Learning approach to professional engagement.</p>
 {% if comment %}
 <p>The mentor who awarded this badge had some comments for you:</p>
-<quote>{{ comment }}</quote>
+<blockquote>{{ comment }}</blockquote>
 {% endif %}
 
 {% if username %}
@@ -38,3 +40,4 @@ Any Hive generally consists of organizations: museums, educational non-profits, 
 <p>Chris Lawrence
 <br>Senior Director of Hive Global
 </p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base/layout.html" %}
+{% block body %}
+<p>{{ 'hi_username_or_there' | gettext | instantiate }}</p>
+
+<p>{{ 'e_c_a_1' | gettext | instantiate | safe }}</p>
+
+<p>{{ 'e_c_a_2' | gettext | instantiate | safe }}</p>
+
+<p>{{ 'Thanks! And congrats! :)' | gettext }}</p>
+
+<p>Amira</p>
+
+<p>Amira Dhalla,
+<br>{{ 'Webmaker Events Co-ordinator' | gettext }}</p>
+{% endblock %}

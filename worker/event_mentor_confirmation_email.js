@@ -1,8 +1,7 @@
-module.exports = function(lumberyard_messager) {
+module.exports = function(lumberyard_messager, mailroom) {
   var SAWMILL_EVENT = 'event_mentor_confirmation_email';
   var LUMBERYARD_EVENT = 'mailer';
   var EVENTS_FROM_EMAIL = 'Webmaker <help@webmaker.org>';
-  var mailroom = require('webmaker-mailroom')();
 
   return function(id, event, cb) {
     var sendEmail = event.data.sendEmail;
