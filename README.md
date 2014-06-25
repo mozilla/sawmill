@@ -29,3 +29,15 @@ Include the following data with the hatchet event:
   confirmUrlNo: 'the URL for negative confirmation of event mentorship with token'
 }
 ```
+
+### `badge_application_denied`
+```js
+{
+  sendEmail: 'if true or undefined, an email will be sent. If false, an email will not be sent.',
+  email: 'the email of the applicant',
+  locale: 'the locale of the email (defaults to English)',
+  badge: 'the badge data, must include "name" and "rubricUrl" property',
+  review: 'the review object, must contain "comment" property'
+}
+```
+
