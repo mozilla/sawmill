@@ -4,7 +4,11 @@ module.exports = function(lumberyard_messager, mailroom) {
   var EVENTS_FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
   return function(id, event, cb) {
-    var sendEmail = event.data.sendEmail;
+
+    if (event.event_type !== SAWMILL_EVENT || (event.data.sendEmail === false)) {
+      return process.nextTick(cb);
+    }
+
     var username = event.data.username;
     var email = event.data.email;
     var eventName = event.data.eventName;
@@ -23,18 +27,15 @@ module.exports = function(lumberyard_messager, mailroom) {
       confirmUrlNo: confirmUrlNo,
     }, locale);
 
-    if (event.event_type === SAWMILL_EVENT && !(sendEmail === false)) {
-      lumberyard_messager.sendMessage({
-        event_type: LUMBERYARD_EVENT,
-        data: {
-          from: EVENTS_FROM_EMAIL,
-          to: email,
-          subject: mail.subject,
-          html: mail.html
-        }
-      }, cb);
-    } else {
-      process.nextTick(cb);
-    }
+    lumberyard_messager.sendMessage({
+      event_type: LUMBERYARD_EVENT,
+      data: {
+        from: EVENTS_FROM_EMAIL,
+        to: email,
+        subject: mail.subject,
+        html: mail.html
+      }
+    }, cb);
+
   };
 };
