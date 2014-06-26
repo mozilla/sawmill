@@ -54,6 +54,10 @@ queue.on("message", function(m) {
       return m.next();
     }
 
+    if (config.debug) {
+      console.log('SAWMILL EVENT [' + m.data.event_type + ']: %j', m.data.data);
+    }
+
     m.deleteMessage(function(err) {
       if (err) {
         console.log(err);
