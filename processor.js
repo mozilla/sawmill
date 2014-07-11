@@ -25,6 +25,7 @@ var workers = async.applyEachSeries([
   worker.backwards_compatibility,
   worker.user_stats(redis_config),
   worker.referrer_stats(redis_config),
+  worker.remind_user_about_event(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
   worker.send_mofo_staff_email(notifier_messager),
   worker.send_new_user_email(notifier_messager),
