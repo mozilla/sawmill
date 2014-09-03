@@ -1,3 +1,7 @@
+if (process.env.NEW_RELIC_ENABLED) {
+  require("newrelic");
+}
+
 var async = require("async");
 var url = require("url");
 var worker = require("./worker");
