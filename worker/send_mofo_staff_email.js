@@ -1,18 +1,26 @@
-module.exports = function(notifier_messager) {
-  var NOTIFIER_EVENT_TYPE = "send_mofo_staff_email";
+module.exports = function(notifier_messager, mailroom) {
+  var LUMBERYARD_EVENT = "mailer";
+  var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
+
   return function(id, event, cb) {
-    if (event.event_type === "create_event" && !(event.data.sendMofoStaffEmail === false)) {
-      notifier_messager.sendMessage({
-        event_type: NOTIFIER_EVENT_TYPE,
-        data: {
-          username: event.data.username,
-          email: event.data.email,
-          eventId: event.data.eventId,
-          locale: event.data.locale
-        }
-      }, cb);
-    } else {
-      process.nextTick(cb);
+    if (event.event_type !== "create_event" || event.data.sendMofoStaffEmail === false) {
+      return process.nextTick(cb);
     }
-  }
-}
+
+    var mail = mailroom.render("notify_mofo_staff_new_event", {
+      username: event.data.username,
+      email: event.data.email,
+      eventId: event.data.eventId
+    }, event.data.locale);
+
+    notifier_messager.sendMessage({
+      event_type: LUMBERYARD_EVENT,
+      data: {
+        from: FROM_EMAIL,
+        to: event.data.email,
+        subject: mail.subject,
+        html: mail.html
+      }
+    }, cb);
+  };
+};

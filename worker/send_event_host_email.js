@@ -21,5 +21,5 @@ module.exports = function(notifier_messager, mailroom) {
     } else {
       process.nextTick(cb);
     }
-  }
-}
+  };
+};
