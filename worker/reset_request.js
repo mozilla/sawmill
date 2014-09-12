@@ -4,14 +4,12 @@ module.exports = function(notifier_messager, mailroom) {
 
   return function(id, event, cb) {
 
-    if (event.event_type !== "login_token_email") {
+    if (event.event_type !== "reset_code_created") {
       return process.nextTick(cb);
     }
 
-    var mail = mailroom.render('login_request', {
-      username: event.data.username,
-      token: event.data.token,
-      loginUrl: event.data.loginUrl
+    var mail = mailroom.render('reset_request', {
+      resetUrl: event.data.resetUrl
     }, event.data.locale);
 
     notifier_messager.sendMessage({

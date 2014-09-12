@@ -22,6 +22,7 @@ var notifier_messager = require("./messager/messager")({
   region: process.env.AWS_QUEUE_REGION,
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
+
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
@@ -30,7 +31,8 @@ var workers = async.applyEachSeries([
 //  worker.user_stats(redis_config),
 //  worker.referrer_stats(redis_config),
   worker.remind_user_about_event(notifier_messager, mailroom),
-  worker.send_one_time_password(notifier_messager, mailroom),
+  worker.login_request(notifier_messager, mailroom),
+  worker.reset_request(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
   worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
   worker.send_new_user_email(notifier_messager, mailroom),
