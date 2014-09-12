@@ -36,6 +36,7 @@ module.exports = function(lumberyard_messenger, mailroom) {
         mailroomTemplate = 'badge_awarded';
         fromEmail = 'Webmaker <help@webmaker.org>';
         break;
+    }
 
     var mail = mailroom.render(mailroomTemplate, {
       username: event.data.username,
