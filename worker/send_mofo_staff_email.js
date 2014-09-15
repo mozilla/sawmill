@@ -1,4 +1,4 @@
-module.exports = function(notifier_messager, mailroom) {
+module.exports = function(notifier_messager, mailroom, staff_email_address) {
   var LUMBERYARD_EVENT = "mailer";
   var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
@@ -17,7 +17,7 @@ module.exports = function(notifier_messager, mailroom) {
       event_type: LUMBERYARD_EVENT,
       data: {
         from: FROM_EMAIL,
-        to: event.data.email,
+        to: staff_email_address,
         subject: mail.subject,
         html: mail.html
       }

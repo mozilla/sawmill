@@ -32,7 +32,7 @@ var workers = async.applyEachSeries([
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.send_one_time_password(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
-  worker.send_mofo_staff_email(notifier_messager, mailroom),
+  worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
   worker.send_new_user_email(notifier_messager, mailroom),
   worker.event_mentor_confirmation_email(notifier_messager, mailroom),
   worker.event_coorganizer_added(notifier_messager, mailroom),
