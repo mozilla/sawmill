@@ -1,6 +1,6 @@
 module.exports = function(notifier_messager, mailroom) {
   var LUMBERYARD_EVENT = "mailer";
-  var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
+  var FROM_EMAIL = 'Amira <help@webmaker.org>';
 
   return function(id, event, cb) {
     if (event.event_type === "create_event" && event.data.sendEventCreationEmails) {
