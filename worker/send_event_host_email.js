@@ -5,7 +5,8 @@ module.exports = function(notifier_messager, mailroom) {
   return function(id, event, cb) {
     if (event.event_type === "create_event" && event.data.sendEventCreationEmails) {
 
-      var activity_type = "";
+      var activity_type;
+      var mail;
       var tags = event.data.eventTags;
 
       if (Array.isArray(tags) && tags.indexOf("wizard") !== -1 && tags.indexOf("meme") !== -1) {
@@ -16,12 +17,17 @@ module.exports = function(notifier_messager, mailroom) {
         activity_type = "video";
       }
 
-      // This can render one of four different emails, based on activity_type
-      var mail = mailroom.render("event_created", {
-        activity_type: activity_type,
-        eventDate: event.data.eventDate,
-        username: event.data.username
-      }, event.data.locale);
+      if (activity_type) {
+        mail = mailroom.render("webmaker_activity", {
+          activity_type: activity_type,
+          eventDate: event.data.eventDate,
+          username: event.data.username
+        }, event.data.locale);
+      } else {
+        mail = mailroom.render("event_created", {
+          username: event.data.username
+        }, event.data.locale);
+      }
 
       notifier_messager.sendMessage({
         event_type: LUMBERYARD_EVENT,
