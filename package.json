@@ -15,11 +15,16 @@
     "async": "0.6.2",
     "aws-sdk": "2.0.3",
     "bucheron": "0.2.1",
+    "forwarded": "^0.1.0",
+    "hapi": "^7.5.2",
+    "hapi-auth-bearer-token": "^2.2.3",
+    "hatchet": "^0.2.2",
+    "joi": "^4.9.0",
     "newrelic": "1.10.3",
     "pg.js": "2.11.1",
     "redis": "0.10.1",
     "sqs-queue-parallel": "0.1.5",
-    "webmaker-mailroom": "0.2.1"
+    "webmaker-mailroom": "0.3.0"
   },
   "devDependencies": {
     "jstest": "^1.0.5"
