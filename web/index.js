@@ -58,7 +58,7 @@ server.route({
 
     hatchet.send("receive_coinbase_donation", request.payload, function(err, data) {
       if (err) {
-        return reply(err).code(500);
+        return reply(Hapi.error.badImplementation("An error occurred while sending a message", err))
       }
 
       reply("queued message with id " + data.MessageId);
