@@ -37,8 +37,7 @@ module.exports = function(notifier_messager, mailroom) {
       email: event.data.customer.email,
       bitcoin_amount: bitcoin_amount,
       usd_amount: usd_amount,
-      transaction_date: event.data.order.created_at,
-      transaction_id: event.data.order.id,
+      transaction_date: event.data.order.created_at
     }, event.data.locale);
 
     notifier_messager.sendMessage({
