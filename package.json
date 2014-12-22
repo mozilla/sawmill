@@ -24,7 +24,7 @@
     "pg.js": "2.11.1",
     "redis": "0.10.1",
     "sqs-queue-parallel": "0.1.5",
-    "webmaker-mailroom": "0.3.2"
+    "webmaker-mailroom": "0.3.3"
   },
   "devDependencies": {
     "jstest": "^1.0.5"
