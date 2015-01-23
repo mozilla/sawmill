@@ -24,6 +24,8 @@ var notifier_messager = require("./messager/messager")({
 });
 
 var mailroom = require('webmaker-mailroom')();
+var apostle = require('apostle.io');
+apostle.domainKey = process.env.APOSTLE_DOMAINKEY;
 
 var workers = async.applyEachSeries([
   worker.archiver(archiver_config),
@@ -36,7 +38,7 @@ var workers = async.applyEachSeries([
   worker.reset_request(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
   worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
-  worker.send_new_user_email(notifier_messager, mailroom),
+  worker.send_new_user_email(apostle),
   worker.event_mentor_confirmation_email(notifier_messager, mailroom),
   worker.event_coorganizer_added(notifier_messager, mailroom),
   worker.sign_up_for_bsd(notifier_messager),
