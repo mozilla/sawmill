@@ -12,6 +12,7 @@
   "author": "",
   "license": "MPL-2.0",
   "dependencies": {
+    "apostle.io": "1.0.0",
     "async": "0.6.2",
     "aws-sdk": "2.0.3",
     "bucheron": "0.2.1",

@@ -1,4 +1,4 @@
-module.exports = function(notifier_messager, mailroom) {
+module.exports = function(apostle) {
   var LUMBERYARD_EVENT = "mailer";
   var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
@@ -7,18 +7,19 @@ module.exports = function(notifier_messager, mailroom) {
       return process.nextTick(cb);
     }
 
-    var mail = mailroom.render("user_created", {
-      username: event.data.username
-    }, event.data.locale);
+    function success() {
+      cb();
+    }
 
-    notifier_messager.sendMessage({
-      event_type: LUMBERYARD_EVENT,
-      data: {
-        from: FROM_EMAIL,
-        to: event.data.email,
-        subject: mail.subject,
-        html: mail.html
-      }
-    }, cb);
+    function error(message, response) {
+      cb(response);
+    }
+
+    var options = {
+      email: event.data.email,
+      username: event.data.username || "there"
+    };
+
+    apostle.deliver("user_created", options).then(success, error);
   };
 };
