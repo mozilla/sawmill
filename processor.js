@@ -5,13 +5,6 @@ if (process.env.NEW_RELIC_ENABLED) {
 var async = require("async");
 var url = require("url");
 var worker = require("./worker");
-var redis_url = url.parse(process.env.REDIS_CONNECTION_STRING);
-var redis_config = {
-  port: redis_url.port,
-  host: redis_url.hostname,
-  auth: redis_url.auth,
-  db: redis_url.path.substring(1)
-};
 var archiver_config = {
   connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING
 };
@@ -28,8 +21,6 @@ var mailroom = require('webmaker-mailroom')();
 var workers = async.applyEachSeries([
   worker.archiver(archiver_config),
   worker.backwards_compatibility,
-//  worker.user_stats(redis_config),
-//  worker.referrer_stats(redis_config),
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
   worker.send_sms(notifier_messager),
