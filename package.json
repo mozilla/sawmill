@@ -14,7 +14,6 @@
   "dependencies": {
     "async": "0.6.2",
     "aws-sdk": "2.0.3",
-    "bucheron": "0.2.1",
     "catbox": "^4.2.1",
     "catbox-memory": "^1.1.1",
     "catbox-redis": "^1.0.4",
