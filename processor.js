@@ -3,6 +3,9 @@ if (process.env.NEW_RELIC_ENABLED) {
 }
 
 var async = require("async");
+var Catbox = require("catbox");
+var CatboxMemory = require("catbox-memory");
+var CatboxRedis = require("catbox-redis");
 var url = require("url");
 var worker = require("./worker");
 var archiver_config = {
@@ -16,54 +19,61 @@ var notifier_messager = require("./messager/messager")({
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
 
-var rateLimitConfig,
+var catbox,
     ttl = process.env.TTL || 1000 * 60 * 5;
 
-if ( process.env.REDIS_HOST && process.env.REDIS_PORT ) {
-  rateLimitConfig = {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    database: process.env.REDIS_DATABASE || 0,
-    password: process.env.REDIS_AUTH,
-    partition: "sawmill"
-  };
+if ( process.env.CACHE_ENGINE === "redis" ) {
+  catbox = new Catbox.Client(
+    new CatboxRedis({
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+      database: process.env.REDIS_DATABASE || 0,
+      password: process.env.REDIS_AUTH,
+      partition: "sawmill"
+    })
+  );
+} else {
+  catbox = new Catbox.Client(new CatboxMemory());
 }
 
-require("./rate-limit")(rateLimitConfig, ttl, startProcessor);
+var mailroom = require('webmaker-mailroom')();
 
+var workers = async.applyEachSeries([
+  // worker.archiver(archiver_config),
+  worker.backwards_compatibility,
+  worker.remind_user_about_event(notifier_messager, mailroom),
+  worker.login_request(notifier_messager, mailroom),
+  worker.send_sms(notifier_messager, catbox, ttl),
+  worker.receive_coinbase_donation(notifier_messager, mailroom),
+  worker.reset_request(notifier_messager, mailroom),
+  worker.send_event_host_email(notifier_messager, mailroom),
+  worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
+  worker.send_new_user_email(notifier_messager, mailroom),
+  worker.event_mentor_confirmation_email(notifier_messager, mailroom),
+  worker.event_coorganizer_added(notifier_messager, mailroom),
+  worker.sign_up_for_bsd(notifier_messager),
+  worker.badge_awarded_send_email(notifier_messager),
+  worker.badge_application_denied(notifier_messager, mailroom),
+  worker.hive_badge_awarded(notifier_messager, mailroom),
+  worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
+]);
 
-function startProcessor(rateLimitClient) {
+var SqsQueueParallel = require('sqs-queue-parallel');
+var config = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  name: process.env.INCOMING_QUEUE_NAME,
+  region: process.env.AWS_QUEUE_REGION,
+  debug: process.env.DEBUG
+};
 
-  var mailroom = require('webmaker-mailroom')();
+catbox.start(startProcessor)
 
-  var workers = async.applyEachSeries([
-    // worker.archiver(archiver_config),
-    worker.backwards_compatibility,
-    worker.remind_user_about_event(notifier_messager, mailroom),
-    worker.login_request(notifier_messager, mailroom),
-    worker.send_sms(notifier_messager, rateLimitClient),
-    worker.receive_coinbase_donation(notifier_messager, mailroom),
-    worker.reset_request(notifier_messager, mailroom),
-    worker.send_event_host_email(notifier_messager, mailroom),
-    worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
-    worker.send_new_user_email(notifier_messager, mailroom),
-    worker.event_mentor_confirmation_email(notifier_messager, mailroom),
-    worker.event_coorganizer_added(notifier_messager, mailroom),
-    worker.sign_up_for_bsd(notifier_messager),
-    worker.badge_awarded_send_email(notifier_messager),
-    worker.badge_application_denied(notifier_messager, mailroom),
-    worker.hive_badge_awarded(notifier_messager, mailroom),
-    worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
-  ]);
+function startProcessor(err) {
+  if ( err ) {
+    throw new Error(err);
+  }
 
-  var SqsQueueParallel = require('sqs-queue-parallel');
-  var config = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    name: process.env.INCOMING_QUEUE_NAME,
-    region: process.env.AWS_QUEUE_REGION,
-    debug: process.env.DEBUG
-  };
   var queue = new SqsQueueParallel(config);
 
   queue.on("message", function(m) {

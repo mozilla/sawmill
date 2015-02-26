@@ -1,4 +1,4 @@
-module.exports = function(notifier_messager, rateLimiter) {
+module.exports = function(notifier_messager, catbox, ttl) {
   var LUMBERYARD_EVENT = "send_sms";
 
   function send( to, body, cb) {
@@ -19,22 +19,25 @@ module.exports = function(notifier_messager, rateLimiter) {
     if (event.event_type !== LUMBERYARD_EVENT) {
       return process.nextTick(cb);
     }
-    if ( !rateLimiter ) {
-      return send(event.data.to, event.data.body, cb);
-    }
 
-    rateLimiter.isCached({
+    catbox.get({
       segment: LUMBERYARD_EVENT,
       id: stripNumber(event.data.to)
-    }, function(cached) {
+    }, function(err, cached) {
+      if ( err ) {
+        return cb(err);
+      }
       if ( cached ) {
         return cb();
       }
 
-      rateLimiter.cache({
+      catbox.set({
         segment: LUMBERYARD_EVENT,
         id: stripNumber(event.data.to)
-      }, true, function() {
+      }, true, ttl, function(err) {
+        if ( err ) {
+          return cb(err);
+        }
         send(event.data.to, event.data.body, cb);
       });
     });
