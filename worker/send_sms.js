@@ -1,3 +1,5 @@
+var crypto = require("crypto");
+
 module.exports = function(notifier_messager, catbox, ttl) {
   var LUMBERYARD_EVENT = "send_sms";
 
@@ -11,8 +13,11 @@ module.exports = function(notifier_messager, catbox, ttl) {
     }, cb);
   }
 
-  function stripNumber(num) {
-    return num.replace(/\+/g, "").replace(/\s/g, "").replace(/-/g, "");
+  function hash(num) {
+    return crypto.createHash("sha256").update(
+      num.replace(/\+/g, "").replace(/\s/g, "").replace(/-/g, ""),
+      "utf8"
+    ).digest("hex");
   }
 
   return function(id, event, cb) {
@@ -22,7 +27,7 @@ module.exports = function(notifier_messager, catbox, ttl) {
 
     catbox.get({
       segment: LUMBERYARD_EVENT,
-      id: stripNumber(event.data.to)
+      id: hash(event.data.to)
     }, function(err, cached) {
       if ( err ) {
         return cb(err);
@@ -33,7 +38,7 @@ module.exports = function(notifier_messager, catbox, ttl) {
 
       catbox.set({
         segment: LUMBERYARD_EVENT,
-        id: stripNumber(event.data.to)
+        id: hash(event.data.to)
       }, true, ttl, function(err) {
         if ( err ) {
           return cb(err);
