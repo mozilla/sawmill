@@ -3,6 +3,9 @@ if (process.env.NEW_RELIC_ENABLED) {
 }
 
 var async = require("async");
+var Catbox = require("catbox");
+var CatboxMemory = require("catbox-memory");
+var CatboxRedis = require("catbox-redis");
 var url = require("url");
 var worker = require("./worker");
 var archiver_config = {
@@ -16,6 +19,23 @@ var notifier_messager = require("./messager/messager")({
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
 
+var catbox,
+    ttl = process.env.TTL || 1000 * 60 * 5;
+
+if ( process.env.CACHE_ENGINE === "redis" ) {
+  catbox = new Catbox.Client(
+    new CatboxRedis({
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+      database: process.env.REDIS_DATABASE || 0,
+      password: process.env.REDIS_AUTH,
+      partition: "sawmill"
+    })
+  );
+} else {
+  catbox = new Catbox.Client(new CatboxMemory());
+}
+
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
@@ -23,7 +43,7 @@ var workers = async.applyEachSeries([
   worker.backwards_compatibility,
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
-  worker.send_sms(notifier_messager),
+  worker.send_sms(notifier_messager, catbox, ttl),
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
@@ -46,25 +66,34 @@ var config = {
   region: process.env.AWS_QUEUE_REGION,
   debug: process.env.DEBUG
 };
-var queue = new SqsQueueParallel(config);
 
-queue.on("message", function(m) {
-  workers(m.message.MessageId, m.data, function(err) {
-    if (err) {
-      console.log(err);
-      return m.next();
-    }
+catbox.start(startProcessor)
 
-    if (config.debug) {
-      console.log('SAWMILL EVENT [' + m.data.event_type + ']: %j', m.data.data);
-    }
+function startProcessor(err) {
+  if ( err ) {
+    throw new Error(err);
+  }
 
-    m.deleteMessage(function(err) {
+  var queue = new SqsQueueParallel(config);
+
+  queue.on("message", function(m) {
+    workers(m.message.MessageId, m.data, function(err) {
       if (err) {
         console.log(err);
+        return m.next();
       }
 
-      m.next();
+      if (config.debug) {
+        console.log('SAWMILL EVENT [' + m.data.event_type + ']: %j', m.data.data);
+      }
+
+      m.deleteMessage(function(err) {
+        if (err) {
+          console.log(err);
+        }
+
+        m.next();
+      });
     });
   });
-});
+}
