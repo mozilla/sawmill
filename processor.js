@@ -96,4 +96,8 @@ function startProcessor(err) {
       });
     });
   });
+
+  queue.on("error", function(err) {
+    console.error(error);
+  });
 }
