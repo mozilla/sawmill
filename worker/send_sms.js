@@ -1,9 +1,6 @@
 module.exports = function(notifier_messager, rateLimiter) {
   var LUMBERYARD_EVENT = "send_sms";
 
-  // limit one SMS/number/5 minutes
-  var TTL = 1000 * 60 * 5;
-
   function send( to, body, cb) {
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
@@ -37,7 +34,7 @@ module.exports = function(notifier_messager, rateLimiter) {
       rateLimiter.cache({
         segment: LUMBERYARD_EVENT,
         id: stripNumber(event.data.to)
-      }, true, TTL, function() {
+      }, true, function() {
         send(event.data.to, event.data.body, cb);
       });
     });

@@ -16,23 +16,21 @@ var notifier_messager = require("./messager/messager")({
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
 
-var rateLimitConfig;
+var rateLimitConfig,
+    ttl = process.env.TTL || 1000 * 60 * 5;
 
-if ( process.env.DISABLE_RATE_LIMITING ) {
-  startProcessor();
-} else {
-  if ( process.env.REDIS_HOST && process.env.REDIS_PORT ) {
-    rateLimitConfig = {
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-      database: process.env.REDIS_DATABASE || 0,
-      password: process.env.REDIS_AUTH,
-      partition: "sawmill"
-    };
-  }
-
-  require("./rate-limit")(rateLimitConfig, startProcessor);
+if ( process.env.REDIS_HOST && process.env.REDIS_PORT ) {
+  rateLimitConfig = {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    database: process.env.REDIS_DATABASE || 0,
+    password: process.env.REDIS_AUTH,
+    partition: "sawmill"
+  };
 }
+
+require("./rate-limit")(rateLimitConfig, ttl, startProcessor);
+
 
 function startProcessor(rateLimitClient) {
 
