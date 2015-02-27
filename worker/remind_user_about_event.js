@@ -3,7 +3,7 @@ module.exports = function(lumberyard_messenger, mailroom) {
   var LUMBERYARD_EVENT = 'mailer';
   var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
-  return function(id, event, cb) {
+  return function(event, cb) {
 
     if (event.event_type !== SAWMILL_EVENT) {
       return process.nextTick(cb);

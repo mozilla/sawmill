@@ -14,7 +14,7 @@ JS.Test.describe('Workers', function() { with(this) {
         }
       };
 
-      worker( null, event, function() {
+      worker( event, function() {
         assertEqual(123, event.data.userId);
         resume();
       });
@@ -27,7 +27,7 @@ JS.Test.describe('Workers', function() { with(this) {
         }
       };
 
-      worker( null, event, function() {
+      worker( event, function() {
         assertEqual("webmaker", event.data.username);
         resume();
       });
@@ -41,7 +41,7 @@ JS.Test.describe('Workers', function() { with(this) {
         }
       };
 
-      worker( null, event, function() {
+      worker( event, function() {
         assertEqual("webmaker", event.data.username  );
         assertEqual(123, event.data.userId);
         resume();
@@ -53,7 +53,7 @@ JS.Test.describe('Workers', function() { with(this) {
         data: {}
       };
 
-      worker( null, event, function() {
+      worker( event, function() {
         assertEqual('en-US', event.data.locale);
         resume();
       });
@@ -66,7 +66,7 @@ JS.Test.describe('Workers', function() { with(this) {
         }
       };
 
-      worker( null, event, function() {
+      worker( event, function() {
         assertEqual('en-CA', event.data.locale);
         resume();
       });

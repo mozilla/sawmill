@@ -1,6 +1,6 @@
 module.exports = function(notifier_messager, spreadsheet, worksheet) {
   var LUMBERYARD_WORKER = "google_spreadsheet";
-  return function(id, event, cb) {
+  return function(event, cb) {
     if (event.event_type === "suggest_featured_resource") {
       var row = {};
 

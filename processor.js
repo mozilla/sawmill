@@ -58,46 +58,36 @@ var workers = async.applyEachSeries([
   worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
 ]);
 
-var SqsQueueParallel = require('sqs-queue-parallel');
-var config = {
+var SQSProcessor = require('sqs-processor');
+var queue = new SQSProcessor({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  name: process.env.INCOMING_QUEUE_NAME,
   region: process.env.AWS_QUEUE_REGION,
-  debug: process.env.DEBUG
-};
+  queueUrl: process.env.INCOMING_QUEUE_URL
+});
 
-catbox.start(startProcessor)
-
-function startProcessor(err) {
-  if ( err ) {
-    throw new Error(err);
+catbox.start(function startProcessor(catbox_error) {
+  if (catbox_error) {
+    throw catbox_error;
   }
 
-  var queue = new SqsQueueParallel(config);
-
-  queue.on("message", function(m) {
-    workers(m.message.MessageId, m.data, function(err) {
-      if (err) {
-        console.log(err);
-        return m.next();
-      }
-
-      if (config.debug) {
-        console.log('SAWMILL EVENT [' + m.data.event_type + ']: %j', m.data.data);
-      }
-
-      m.deleteMessage(function(err) {
-        if (err) {
-          console.log(err);
-        }
-
-        m.next();
-      });
+  queue.startPolling(function(message, poll_callback) {
+    workers(message, function(worker_error) {
+      poll_callback(worker_error);
     });
+  }, function(poll_error) {
+    console.log(poll_error);
+    console.log(poll_error.stack);
   });
+});
 
-  queue.on("error", function(err) {
-    console.error(err);
+var shutdown_handler = function() {
+  queue.stopPolling(function() {
+    console.log("polling terminated");
+    process.exit(0);
   });
-}
+};
+
+// Heroku's dyno manager sends SIGTERM when requesting dyno shut down, Ctrl-C sends SIGINT
+process.on("SIGTERM", shutdown_handler);
+process.on("SIGINT", shutdown_handler);

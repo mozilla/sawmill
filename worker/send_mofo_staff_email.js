@@ -2,7 +2,7 @@ module.exports = function(notifier_messager, mailroom, staff_email_address) {
   var LUMBERYARD_EVENT = "mailer";
   var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
-  return function(id, event, cb) {
+  return function(event, cb) {
     if (event.event_type !== "create_event" || event.data.sendMofoStaffEmail === false) {
       return process.nextTick(cb);
     }

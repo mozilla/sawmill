@@ -7,7 +7,7 @@ var DEFAULT_VALUES = {
   "locale": "en-US"
 };
 
-module.exports = function(id, event, cb) {
+module.exports = function(event, cb) {
   Object.keys(event.data).forEach(function(key) {
     if (event.data.hasOwnProperty(key) && BACKWARDS_COMPATIBILITY_MAP[key]) {
       event.data[BACKWARDS_COMPATIBILITY_MAP[key]] = event.data[key];

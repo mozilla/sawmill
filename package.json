@@ -24,7 +24,7 @@
     "joi": "^4.9.0",
     "newrelic": "^1.17.0",
     "pg.js": "2.11.1",
-    "sqs-queue-parallel": "0.1.6",
+    "sqs-processor": "^2.0.0",
     "webmaker-mailroom": "0.3.4"
   },
   "devDependencies": {

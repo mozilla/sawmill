@@ -1,16 +1,23 @@
+var crypto = require("crypto");
 var pg = require("pg.js");
+
+var hash_string = function(string) {
+  return crypto.createHash("sha256").update(string, "utf8").digest("hex");
+};
 var query = "INSERT INTO user_events (id, event) " +
   "SELECT $1, $2 WHERE NOT EXISTS " +
   "(SELECT id FROM user_events WHERE id = $1);";
 
 module.exports = function(config) {
-  return function(id, event, cb) {
+  return function(event, cb) {
     pg.connect(config.connection_string, function(err, client, done) {
       if (err) {
         return cb(err);
       }
 
-      client.query(query, [id, event], function(err, result) {
+      var hash = hash_string(JSON.stringify(event));
+
+      client.query(query, [hash, event], function(err, result) {
         done();
         cb(err);
       });

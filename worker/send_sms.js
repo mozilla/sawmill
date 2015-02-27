@@ -20,7 +20,7 @@ module.exports = function(notifier_messager, catbox, ttl) {
     ).digest("hex");
   }
 
-  return function(id, event, cb) {
+  return function(event, cb) {
     if (event.event_type !== LUMBERYARD_EVENT) {
       return process.nextTick(cb);
     }

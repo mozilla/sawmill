@@ -2,7 +2,7 @@ module.exports = function(notifier_messager, mailroom) {
   var LUMBERYARD_EVENT = 'mailer';
   var FROM_EMAIL = 'Mark Surman, Mozilla.org <joinmozilla@mozilla.org>';
 
-  return function(id, event, cb) {
+  return function(event, cb) {
 
     if (event.event_type !== "receive_coinbase_donation" ||
         !event.data.order ||
