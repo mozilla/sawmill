@@ -1,7 +1,3 @@
-if (process.env.NEW_RELIC_ENABLED) {
-  require("newrelic");
-}
-
 var async = require("async");
 var Catbox = require("catbox");
 var CatboxMemory = require("catbox-memory");

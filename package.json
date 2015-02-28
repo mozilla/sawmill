@@ -22,7 +22,6 @@
     "hapi-auth-bearer-token": "^2.2.3",
     "hatchet": "^0.2.2",
     "joi": "^4.9.0",
-    "newrelic": "^1.17.0",
     "pg.js": "2.11.1",
     "sqs-processor": "^2.0.0",
     "webmaker-mailroom": "0.3.4"
