@@ -14,7 +14,13 @@ var Messager = function Messager(config) {
 Messager.prototype.sendMessage = function(data, cb) {
   this._sqs.sendMessage({
     MessageBody: JSON.stringify(data)
-  }, cb);
+  }, function(error, metadata) {
+    if (error) {
+      error.from = "messenger:sendMessage";
+    }
+
+    cb(error, metadata);
+  });
 };
 
 module.exports = function(config) {
