@@ -1,3 +1,7 @@
+if (process.env.ENABLE_ASYNC_STACKTRACES === 'true') {
+  require("longjohn");
+}
+
 var async = require("async");
 var Catbox = require("catbox");
 var CatboxMemory = require("catbox-memory");
