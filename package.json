@@ -13,7 +13,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "async": "0.6.2",
-    "aws-sdk": "2.0.3",
+    "aws-sdk": "^2.1.14",
     "catbox": "^4.2.1",
     "catbox-memory": "^1.1.1",
     "catbox-redis": "^1.0.4",
@@ -23,7 +23,7 @@
     "hatchet": "^0.2.2",
     "joi": "^4.9.0",
     "longjohn": "^0.2.4",
-    "pg.js": "2.11.1",
+    "pg.js": "^4.1.1",
     "sqs-processor": "^2.0.0",
     "webmaker-mailroom": "0.3.4"
   },
