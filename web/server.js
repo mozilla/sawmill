@@ -1,12 +1,15 @@
 var forwarded = require("forwarded-for");
 var Hapi = require("hapi");
 var hatchet = require("hatchet");
+var Netmask = require("netmask").Netmask;
 
 module.exports = function(config) {
   var server = Hapi.createServer(config.host, config.port, {
     app: {
       trust_proxy: config.trust_proxy,
-      coinbase_address: config.coinbase_address,
+      coinbase_ip_range: config.coinbase_ip_range.map(function(cidr) {
+        return new Netmask(cidr);
+      }),
       coinbase_protocol: config.coinbase_protocol,
       coinbase_secret: config.coinbase_secret
     }
@@ -38,7 +41,13 @@ module.exports = function(config) {
       if (client_proto !== request.server.settings.app.coinbase_protocol) {
         return reply(Hapi.error.badRequest("Requests must be made using " + request.server.settings.app.coinbase_protocol));
       }
-      if (client_ip !== request.server.settings.app.coinbase_address) {
+      // This logic is a little weird so:
+      // 1) Loop through all of the valid IP ranges we have configured
+      // 2) If every single block does not contain the client ip
+      // 3) Then the client IP is not on the whitelist
+      if (request.server.settings.app.coinbase_ip_range.every(function(block) {
+        return !block.contains(client_ip);
+      })) {
         return reply(Hapi.error.forbidden("IP address " + client_ip + " rejected"));
       }
 
