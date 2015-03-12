@@ -1,10 +1,11 @@
+var Boom = require("boom");
 var forwarded = require("forwarded-for");
 var Hapi = require("hapi");
 var hatchet = require("hatchet");
 var Netmask = require("netmask").Netmask;
 
 module.exports = function(config) {
-  var server = Hapi.createServer(config.host, config.port, {
+  var server = new Hapi.Server({
     app: {
       trust_proxy: config.trust_proxy,
       coinbase_ip_range: config.coinbase_ip_range.map(function(cidr) {
@@ -14,8 +15,12 @@ module.exports = function(config) {
       coinbase_secret: config.coinbase_secret
     }
   });
+  server.connection({
+    host: config.host,
+    port: config.port
+  });
 
-  server.pack.register(require("hapi-auth-bearer-token"), function(err) {});
+  server.register(require("hapi-auth-bearer-token"), function(err) {});
 
   server.auth.strategy("simple", "bearer-access-token", {
     validateFunc: function(token, callback) {
@@ -39,7 +44,7 @@ module.exports = function(config) {
         request.headers["x-forwarded-proto"] : request.server.info.protocol;
 
       if (client_proto !== request.server.settings.app.coinbase_protocol) {
-        return reply(Hapi.error.badRequest("Requests must be made using " + request.server.settings.app.coinbase_protocol));
+        return reply(Boom.badRequest("Requests must be made using " + request.server.settings.app.coinbase_protocol));
       }
       // This logic is a little weird so:
       // 1) Loop through all of the valid IP ranges we have configured
@@ -48,12 +53,12 @@ module.exports = function(config) {
       if (request.server.settings.app.coinbase_ip_range.every(function(block) {
         return !block.contains(client_ip);
       })) {
-        return reply(Hapi.error.forbidden("IP address " + client_ip + " rejected"));
+        return reply(Boom.forbidden("IP address " + client_ip + " rejected"));
       }
 
       hatchet.send("receive_coinbase_donation", request.payload, function(err, data) {
         if (err) {
-          return reply(Hapi.error.badImplementation("An error occurred while sending a message", err))
+          return reply(Boom.badImplementation("An error occurred while sending a message", err))
         }
 
         reply("queued message with id " + data.MessageId);
