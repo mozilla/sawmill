@@ -58,7 +58,7 @@ module.exports = function(config) {
 
       hatchet.send("receive_coinbase_donation", request.payload, function(err, data) {
         if (err) {
-          return reply(Boom.badImplementation("An error occurred while sending a message", err))
+          return reply(Boom.badImplementation("An error occurred while sending a message", err));
         }
 
         reply("queued message with id " + data.MessageId);
