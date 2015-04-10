@@ -16,7 +16,7 @@ module.exports = function(notifier_messager, mailroom) {
 
     if ( event.data.migrateUser ) {
       templateName = 'migrate_user';
-      mailOptions.migrateUrl = event.data.migrateUrl;
+      mailOptions.migrateUrl = event.data.loginUrl;
     } else {
       templateName = event.data.verified === true ? 'login_request' : 'account_confirmation';
       mailOptions.loginUrl = event.data.loginUrl;
