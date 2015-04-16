@@ -7,7 +7,9 @@ module.exports = function(notifier_messager, mailroom) {
       return process.nextTick(cb);
     }
 
-    var mail = mailroom.render("user_created", {
+    var mailTemplate = event.data.teach ? "user_created_teach" : "user_created";
+
+    var mail = mailroom.render(mailTemplate, {
       username: event.data.username
     }, event.data.locale);
 
