@@ -7,17 +7,11 @@ module.exports = function(notifier_messager, mailroom) {
       return process.nextTick(cb);
     }
 
-    var mail;
+    var mailTemplate = event.data.teach ? "user_created_teach" : "user_created";
 
-    if ( event.data.teach ) {
-      mail = mailroom.render("user_created_teach", {
-        username: event.data.username
-      }, event.data.locale);
-    } else {
-      mail = mailroom.render("user_created", {
-        username: event.data.username
-      }, event.data.locale);
-    }
+    var mail = mailroom.render(mailTemplate, {
+      username: event.data.username
+    }, event.data.locale);
 
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
