@@ -9,6 +9,8 @@ module.exports = function(notifier_messager, mailroom) {
 
     var mailTemplate = event.data.teach ? "user_created_teach" : "user_created";
 
+    FROM_EMAIL = event.data.teach ? "teachtheweb@mozillafoundation.org" : FROM_EMAIL;
+
     var mail = mailroom.render(mailTemplate, {
       username: event.data.username
     }, event.data.locale);
