@@ -44,7 +44,7 @@ var workers = async.applyEachSeries([
   worker.reset_request(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
   worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
-  worker.send_new_user_email(notifier_messager, mailroom),
+  worker.send_new_user_email(notifier_messager, mailroom, process.env.TEACH_CLIENT_ID),
   worker.event_mentor_confirmation_email(notifier_messager, mailroom),
   worker.event_coorganizer_added(notifier_messager, mailroom),
   worker.sign_up_for_bsd(notifier_messager),
