@@ -51,6 +51,7 @@ var workers = async.applyEachSeries([
   worker.badge_awarded_send_email(notifier_messager),
   worker.badge_application_denied(notifier_messager, mailroom),
   worker.hive_badge_awarded(notifier_messager, mailroom),
+  worker.mozfest_session_proposal(notifier_messager, mailroom),
   worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
 ]);
 
