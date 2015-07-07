@@ -146,11 +146,9 @@ lab.experiment("Coinbase", function() {
 
     s.inject(request, function(response) {
       Code.expect(response.statusCode).to.equal(401);
-      Code.expect(response.result).to.deep.equal({
-        statusCode: 401,
-        error: "Unauthorized",
-        message: "Bad token"
-      });
+      Code.expect(response.result.statusCode).to.equal(401);
+      Code.expect(response.result.error).to.equal("Unauthorized");
+      Code.expect(response.result.message).to.equal("Bad token");
 
       done();
     });
