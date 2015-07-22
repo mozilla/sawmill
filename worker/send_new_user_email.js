@@ -17,7 +17,7 @@ module.exports = function(notifier_messager, mailroom, teach_client_id) {
 
     var mail = mailroom.render(mailTemplate, {
       username: event.data.username
-    }, event.data.locale);
+    }, {locale: event.data.locale});
 
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
