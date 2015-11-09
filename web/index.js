@@ -5,7 +5,9 @@ var config = {
 
   coinbase_ip_range: process.env.COINBASE_IP_RANGE.split(","),
   coinbase_protocol: process.env.COINBASE_PROTOCOL,
-  coinbase_secret: process.env.COINBASE_SECRET
+  coinbase_secret: process.env.COINBASE_SECRET,
+
+  stripe_secret: process.env.STRIPE_SECRET
 };
 
 var server = require("./server")(config);

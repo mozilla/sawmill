@@ -12,7 +12,8 @@ module.exports = function(config) {
         return new Netmask(cidr);
       }),
       coinbase_protocol: config.coinbase_protocol,
-      coinbase_secret: config.coinbase_secret
+      coinbase_secret: config.coinbase_secret,
+      stripe_secret: config.stripe_secret
     }
   });
   server.connection({
@@ -26,6 +27,13 @@ module.exports = function(config) {
     validateFunc: function(token, callback) {
       // this = request
       callback(null, token === this.server.settings.app.coinbase_secret, { token: token });
+    }
+  });
+
+  server.auth.strategy("stripe", "bearer-access-token", {
+    validateFunc: function(token, callback) {
+      // this = request
+      callback(null, token === this.server.settings.app.stripe_secret, { token: token });
     }
   });
 
@@ -63,6 +71,29 @@ module.exports = function(config) {
 
         reply("queued message with id " + data.MessageId);
       });
+    }
+  });
+
+  server.route({
+    method: "POST",
+    path: "/stripe/callback",
+    config: {
+      auth: "stripe"
+    },
+    handler: function(request, reply) {
+      var event = request.payload;
+
+      if (event.type !== "charge.succeeded") {
+        return reply("Event type not implemented");
+      }
+
+      hatchet.send("stripe_charge_succeeded", event.data.object, function(err, data) {
+        if (err) {
+          return reply(Boom.badImplementation("An error occurred while sending a message", err));
+        }
+
+        reply("queued message with id " + data.MessageId);
+      })
     }
   });
 
