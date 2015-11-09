@@ -245,3 +245,88 @@ lab.experiment("Coinbase", function() {
     });
   });
 });
+
+lab.experiment("Stripe", function() {
+  lab.test("Success", function(done) {
+    var s = server({
+      coinbase_ip_range: [],
+      stripe_secret: "secret"
+    });
+
+    var request = {
+      method: "POST",
+      url: "/stripe/callback?access_token=secret",
+      payload: {
+        type: "charge.succeeded",
+        data: {
+          object: {}
+        }
+      }
+    };
+
+    s.inject(request, function(response) {
+      Code.expect(response.statusCode).to.equal(200);
+      Code.expect(response.result).to.equal("queued message with id fake");
+
+      done();
+    });
+  });
+
+  lab.test("Event type not implemented", function(done) {
+    var s = server({
+      coinbase_ip_range: [],
+      stripe_secret: "secret"
+    });
+
+    var request = {
+      method: "POST",
+      url: "/stripe/callback?access_token=secret",
+      payload: {
+        type: "charge.nonexistent",
+        data: {
+          object: {}
+        }
+      }
+    };
+
+    s.inject(request, function(response) {
+      Code.expect(response.statusCode).to.equal(200);
+      Code.expect(response.result).to.equal("Event type not implemented");
+
+      done();
+    });
+  });
+
+  lab.test("hatchet error", function(done) {
+    var s = server({
+      coinbase_ip_range: [],
+      stripe_secret: "secret"
+    });
+
+    var request = {
+      method: "POST",
+      url: "/stripe/callback?access_token=secret",
+      payload: {
+        type: "charge.succeeded",
+        data: {
+          object: {}
+        }
+      }
+    };
+
+    process.env.HATCHET_QUEUE_URL = "http://127.0.0.1";
+
+    s.inject(request, function(response) {
+      delete process.env.HATCHET_QUEUE_URL;
+
+      Code.expect(response.statusCode).to.equal(500);
+      Code.expect(response.result).to.deep.equal({
+        statusCode: 500,
+        error: "Internal Server Error",
+        message: "An internal server error occurred"
+      });
+
+      done();
+    });
+  });
+});
