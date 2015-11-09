@@ -31,8 +31,8 @@ module.exports = function(notifier_messager, mailroom) {
       data: {
         from: FROM_EMAIL,
         to: event.data.receipt_email,
-        subject: mail.subject,
-        html: mail.html
+        subject: email.subject,
+        html: email.html
       }
     }, cb);
   };
