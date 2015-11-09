@@ -40,6 +40,7 @@ var workers = async.applyEachSeries([
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
   worker.send_sms(notifier_messager, catbox, ttl),
+  worker.stripe_charge_succeeded(notifier_messager, mailroom),
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
   worker.send_event_host_email(notifier_messager, mailroom),
