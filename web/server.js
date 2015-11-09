@@ -22,7 +22,7 @@ module.exports = function(config) {
 
   server.register(require("hapi-auth-bearer-token"), function(err) {});
 
-  server.auth.strategy("simple", "bearer-access-token", {
+  server.auth.strategy("coinbase", "bearer-access-token", {
     validateFunc: function(token, callback) {
       // this = request
       callback(null, token === this.server.settings.app.coinbase_secret, { token: token });
@@ -33,7 +33,7 @@ module.exports = function(config) {
     method: "POST",
     path: "/coinbase/callback",
     config: {
-      auth: "simple"
+      auth: "coinbase"
     },
     handler: function(request, reply) {
       // Do IP & Protocol validation here because I have no idea where else
