@@ -1,4 +1,5 @@
 var Boom = require("boom");
+var debug = require("debug")("http");
 var forwarded = require("forwarded-for");
 var Hapi = require("hapi");
 var hatchet = require("hatchet");
@@ -82,6 +83,8 @@ module.exports = function(config) {
     },
     handler: function(request, reply) {
       var event = request.payload;
+
+      debug("received stripe event %j", event);
 
       if (event.type !== "charge.succeeded") {
         return reply("Event type not implemented");

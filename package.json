@@ -19,6 +19,7 @@
     "catbox-memory": "^1.1.1",
     "catbox-redis": "^1.0.4",
     "currency-symbol-map": "2.1.0",
+    "debug": "2.2.0",
     "forwarded-for": "^1.0.0",
     "hapi": "^8.3.1",
     "hapi-auth-bearer-token": "^3.1.1",
