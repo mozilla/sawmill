@@ -51,13 +51,13 @@ module.exports = function(notifier_messager, mailroom) {
       state: event.data.source.state,
       zipcode: event.data.source.address_zip,
       country: event.data.source.address_country
-    }, event.data.locale);
+    }, event.data.metadata.locale);
 
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
       data: {
         from: FROM_EMAIL,
-        to: event.data.receipt_email,
+        to: event.data.metadata.email,
         subject: email.subject,
         html: email.html
       }
