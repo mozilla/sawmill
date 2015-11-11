@@ -61,7 +61,9 @@ module.exports = function(notifier_messager, mailroom) {
       state: event.data.source.state,
       zipcode: event.data.source.address_zip,
       country: event.data.source.address_country
-    }, locale);
+    }, {
+      locale: locale
+    });
 
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
