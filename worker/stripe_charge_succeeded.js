@@ -45,11 +45,9 @@ module.exports = function(notifier_messager, mailroom) {
       currency: currency_code
     }).format(amount);
 
-    var template_name = 'stripe_charge_succeeded';
+    var template_name = 'stripe_charge_succeeded_2015';
     if (localesWith2014Email.indexOf(locale) > -1) {
-      template_name = template_name + '_2014';
-    } else {
-      template_name = template_name + '_2015';
+      template_name = 'stripe_charge_succeeded_2014';
     }
 
     var email = mailroom.render(template_name, {
