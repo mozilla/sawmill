@@ -17,8 +17,8 @@ var zeroDecimalCurrencies = [
   'XPF'
 ];
 
-var localesWith2015Email = [
-  'en-US'
+var localesWith2014Email = [
+  'de'
 ];
 
 module.exports = function(notifier_messager, mailroom) {
@@ -46,10 +46,10 @@ module.exports = function(notifier_messager, mailroom) {
     }).format(amount);
 
     var template_name = 'stripe_charge_succeeded';
-    if (localesWith2015Email.indexOf(locale) > -1) {
-      template_name = template_name + '_2015';
-    } else {
+    if (localesWith2014Email.indexOf(locale) > -1) {
       template_name = template_name + '_2014';
+    } else {
+      template_name = template_name + '_2015';
     }
 
     var email = mailroom.render(template_name, {
