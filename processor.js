@@ -35,7 +35,7 @@ if ( process.env.CACHE_ENGINE === "redis" ) {
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
-  worker.archiver(archiver_config),
+  // worker.archiver(archiver_config),
   worker.backwards_compatibility,
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
@@ -53,7 +53,8 @@ var workers = async.applyEachSeries([
   worker.badge_application_denied(notifier_messager, mailroom),
   worker.hive_badge_awarded(notifier_messager, mailroom),
   worker.mozfest_session_proposal(notifier_messager, mailroom),
-  worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET)
+  worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET),
+  worker.sign_up_for_mofo_newsletter
 ]);
 
 var SQSProcessor = require('sqs-processor');

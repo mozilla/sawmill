@@ -26,6 +26,7 @@
     "joi": "^4.9.0",
     "netmask": "^1.0.5",
     "pg.js": "^4.1.1",
+    "request": "2.65.0",
     "sqs-processor": "^2.0.0",
     "webmaker-mailroom": "1.2.0"
   },
