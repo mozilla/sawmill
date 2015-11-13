@@ -1,5 +1,15 @@
 var httpRequest = require('request');
-var EVENT_TYPE = "sign_up_for_mofo_newsletter";
+var EVENT_TYPE = "send_post_request";
+
+/* Post data format example
+{
+  url: "https://example.com",
+  json: true,
+  form: {
+    data: "dataz"
+  }
+}
+*/
 
 module.exports = function(event, cb) {
   if (event.event_type === EVENT_TYPE) {
