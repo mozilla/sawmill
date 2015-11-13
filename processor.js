@@ -35,7 +35,7 @@ if ( process.env.CACHE_ENGINE === "redis" ) {
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
-  // worker.archiver(archiver_config),
+  worker.archiver(archiver_config),
   worker.backwards_compatibility,
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
