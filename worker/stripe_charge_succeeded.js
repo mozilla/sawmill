@@ -56,6 +56,7 @@ module.exports = function(notifier_messager, mailroom) {
       // If there's an invoice attached to this charge, then it's a subscription
       // The 2014 variant doesn't display anything different with this parameter
       recurring_donation: !!event.data.invoice,
+      transaction_id: event.data.id,
       address: event.data.source.address_line1,
       city: event.data.source.address_city,
       state: event.data.source.state,
