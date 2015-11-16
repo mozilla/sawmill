@@ -42,7 +42,7 @@ module.exports = function(notifier_messager, mailroom) {
 
   return function(event, cb) {
 
-    if (event.event_type !== 'stripe_charge_succeeded') {
+    if (event.event_type !== 'stripe_charge_succeeded' && TO_EMAIL) {
       return process.nextTick(cb);
     }
 
@@ -58,7 +58,7 @@ module.exports = function(notifier_messager, mailroom) {
     }
 
     var email = `
-      A large donation of $${amount} USD was made on donate.mozilla.org.
+      <p>A large donation of $${amount} USD was made on donate.mozilla.org.</p>
 
       <a href="https://dashboard.stripe.com/payments/${event.data.id}">
         click here to review the charge on stripe.com
