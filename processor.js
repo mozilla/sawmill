@@ -54,7 +54,8 @@ var workers = async.applyEachSeries([
   worker.hive_badge_awarded(notifier_messager, mailroom),
   worker.mozfest_session_proposal(notifier_messager, mailroom),
   worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET),
-  worker.send_post_request
+  worker.send_post_request,
+  worker.large_stripe_charge(notifier_messager, mailroom)
 ]);
 
 var SQSProcessor = require('sqs-processor');
