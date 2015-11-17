@@ -42,7 +42,7 @@ module.exports = function(notifier_messager, mailroom) {
 
   return function(event, cb) {
 
-    if (event.event_type !== 'stripe_charge_succeeded' && TO_EMAIL) {
+    if (event.event_type !== 'stripe_charge_succeeded' || !TO_EMAIL) {
       return process.nextTick(cb);
     }
 
@@ -52,6 +52,8 @@ module.exports = function(notifier_messager, mailroom) {
     if (ZERO_DECIMAL_CURRENCIES.indexOf(currency) === -1) {
       amount = amount / 100;
     }
+
+    amount = money(amount).from(currency).to('USD');
 
     if (amount <= LARGE_DONATION_AMOUNT) {
       return process.nextTick(cb);
