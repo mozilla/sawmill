@@ -53,7 +53,11 @@ module.exports = function(notifier_messager, mailroom) {
       amount = amount / 100;
     }
 
-    amount = money(amount).from(currency).to('USD');
+    try {
+      amount = money(amount).from(currency).to('USD');
+    } catch(fxError) {
+      return cb(new Error(`Cannot convert ${amount} ${currency} to USD`));
+    }
 
     if (amount <= LARGE_DONATION_AMOUNT) {
       return process.nextTick(cb);
