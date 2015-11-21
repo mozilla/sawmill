@@ -18,7 +18,23 @@ var zeroDecimalCurrencies = [
 ];
 
 var localesWith2014Email = [
-  'de'
+  'az',
+  'ca',
+  'cs',
+  'de',
+  'es',
+  'fr',
+  'fy-NL',
+  'it',
+  'ko',
+  'nl',
+  'pt-BR',
+  'pt-PT',
+  'ro',
+  'sl',
+  'sq',
+  'zh-CN',
+  'zh-TW'
 ];
 
 var debug = require("debug")("worker:stripe_charge_succeeded");
