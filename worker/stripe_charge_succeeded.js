@@ -21,6 +21,8 @@ var localesWith2014Email = [
   'de'
 ];
 
+var debug = require("debug")("worker:stripe_charge_succeeded");
+
 module.exports = function(notifier_messager, mailroom) {
   const LUMBERYARD_EVENT = 'mailer';
   const FROM_EMAIL = 'The Mozilla Team <donate@mozilla.org>';
@@ -49,6 +51,8 @@ module.exports = function(notifier_messager, mailroom) {
     if (localesWith2014Email.indexOf(locale) > -1) {
       template_name = 'stripe_charge_succeeded_2014';
     }
+
+    debug(`${event.data.id} - ${locale} - ${template_name} - ${amount}`);
 
     var email = mailroom.render(template_name, {
       name: event.data.source.name,
