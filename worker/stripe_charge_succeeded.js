@@ -33,6 +33,7 @@ var localesWith2014Email = [
   'ro',
   'sl',
   'sq',
+  'sv-SE',
   'zh-CN',
   'zh-TW'
 ];
