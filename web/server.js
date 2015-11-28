@@ -99,7 +99,7 @@ module.exports = function(config) {
         event.data.object.customer_object = customer;
 
         hatchet.send("stripe_charge_succeeded", event.data.object, function(hatchet_error, data) {
-          if (err) {
+          if (hatchet_error) {
             return reply(Boom.badImplementation("An error occurred while sending a message", hatchet_error));
           }
 
