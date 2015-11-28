@@ -51,7 +51,7 @@ module.exports = function(notifier_messager, mailroom) {
     }
 
     var currency_code = event.data.currency.toUpperCase();
-    var locale = event.data.metadata.locale;
+    var locale = event.data.customer_object.metadata.locale;
 
     // If this is a zero decimal currency then use it directly
     // Otherwise divide by 100 to get currency major.minor amount
@@ -69,7 +69,7 @@ module.exports = function(notifier_messager, mailroom) {
       template_name = 'stripe_charge_succeeded_2014';
     }
 
-    debug(`${event.data.id} - ${locale} - ${template_name} - ${amount}`);
+    debug(`${event.data.id} - ${!!event.data.invoice ? "recurring" : "one-time"} - ${locale} - ${template_name} - ${amount}`);
 
     var email = mailroom.render(template_name, {
       name: event.data.source.name,
@@ -91,7 +91,7 @@ module.exports = function(notifier_messager, mailroom) {
       event_type: LUMBERYARD_EVENT,
       data: {
         from: FROM_EMAIL,
-        to: event.data.metadata.email,
+        to: event.data.customer_object.email,
         subject: email.subject,
         html: email.html
       }

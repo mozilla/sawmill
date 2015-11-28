@@ -4,6 +4,7 @@ var forwarded = require("forwarded-for");
 var Hapi = require("hapi");
 var hatchet = require("hatchet");
 var Netmask = require("netmask").Netmask;
+var Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = function(config) {
   var server = new Hapi.Server({
@@ -90,13 +91,21 @@ module.exports = function(config) {
         return reply("Event type not implemented");
       }
 
-      hatchet.send("stripe_charge_succeeded", event.data.object, function(err, data) {
-        if (err) {
-          return reply(Boom.badImplementation("An error occurred while sending a message", err));
+      Stripe.customers.retrieve(event.data.object.customer, function(retrieve_error, customer) {
+        if (retrieve_error) {
+          return reply(Boom.badImplementation("An error occurred while retrieving the customer", retrieve_error));
         }
 
-        reply("queued message with id " + data.MessageId);
-      })
+        event.data.object.customer_object = customer;
+
+        hatchet.send("stripe_charge_succeeded", event.data.object, function(hatchet_error, data) {
+          if (err) {
+            return reply(Boom.badImplementation("An error occurred while sending a message", hatchet_error));
+          }
+
+          reply("queued message with id " + data.MessageId);
+        });
+      });
     }
   });
 
