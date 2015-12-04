@@ -81,6 +81,7 @@ module.exports = function(notifier_messager, mailroom) {
       // The 2014 variant doesn't display anything different with this parameter
       recurring_donation: !!event.data.invoice,
       transaction_id: event.data.id,
+      timestamp: new Date(event.data.created * 1000).toISOString(),
       address: event.data.source.address_line1,
       city: event.data.source.address_city,
       state: event.data.source.state,
