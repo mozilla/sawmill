@@ -75,18 +75,12 @@ module.exports = function(notifier_messager, mailroom) {
     debug(`${event.data.id} - ${!!event.data.invoice ? "recurring" : "one-time"} - ${locale} - ${template_name} - ${amount}`);
 
     var email = mailroom.render(template_name, {
-      name: event.data.source.name,
       amount: amount,
       // If there's an invoice attached to this charge, then it's a subscription
-      // The 2014 variant doesn't display anything different with this parameter
       recurring_donation: !!event.data.invoice,
       transaction_id: event.data.id,
       timestamp: new Date(event.data.created * 1000).toISOString(),
-      address: event.data.source.address_line1,
-      city: event.data.source.address_city,
-      state: event.data.source.state,
-      zipcode: event.data.source.address_zip,
-      country: event.data.source.address_country
+      livemode: event.data.livemode
     }, {
       locale: locale
     });
