@@ -48,7 +48,7 @@ var workers = async.applyEachSeries([
   worker.send_new_user_email(notifier_messager, mailroom, process.env.TEACH_CLIENT_ID),
   worker.event_mentor_confirmation_email(notifier_messager, mailroom),
   worker.event_coorganizer_added(notifier_messager, mailroom),
-  worker.sign_up_for_bsd(notifier_messager),
+  worker.sign_up_for_webmaker_mailing_list(notifier_messager),
   worker.badge_awarded_send_email(notifier_messager),
   worker.badge_application_denied(notifier_messager, mailroom),
   worker.hive_badge_awarded(notifier_messager, mailroom),
