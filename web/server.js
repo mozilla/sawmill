@@ -87,25 +87,39 @@ module.exports = function(config) {
 
       debug("received stripe event %j", event);
 
-      if (event.type !== "charge.succeeded") {
-        return reply("Event type not implemented");
+      switch (event.type) {
+        case "charge.succeeded":
+          Stripe.customers.retrieve(event.data.object.customer, function(retrieve_error, customer) {
+            if (retrieve_error) {
+              return reply(Boom.badImplementation("An error occurred while retrieving the customer", retrieve_error));
+            }
+
+            event.data.object.customer_object = customer;
+
+            hatchet.send("stripe_charge_succeeded", event.data.object, function(hatchet_error, data) {
+              if (hatchet_error) {
+                return reply(Boom.badImplementation("An error occurred while sending a message", hatchet_error));
+              }
+
+              reply("queued message with id " + data.MessageId);
+            });
+          });
+          break;
+        case "charge.dispute.created":
+          Stripe.disputes.close(
+            event.data.object.id,
+            function(close_dispute_error, dispute) {
+              if (close_dispute_error) {
+                return reply(Boom.badImplementation("An error occurred while closing the dispute", close_dispute_error));
+              }
+
+              reply("Dispute closed");
+            }
+          );
+          break;
+        default:
+          reply("Event type not implemented");
       }
-
-      Stripe.customers.retrieve(event.data.object.customer, function(retrieve_error, customer) {
-        if (retrieve_error) {
-          return reply(Boom.badImplementation("An error occurred while retrieving the customer", retrieve_error));
-        }
-
-        event.data.object.customer_object = customer;
-
-        hatchet.send("stripe_charge_succeeded", event.data.object, function(hatchet_error, data) {
-          if (hatchet_error) {
-            return reply(Boom.badImplementation("An error occurred while sending a message", hatchet_error));
-          }
-
-          reply("queued message with id " + data.MessageId);
-        });
-      });
     }
   });
 
