@@ -1,6 +1,6 @@
+const async = require('async');
 const LUMBERYARD_EVENT = 'mailer';
 const FROM_EMAIL = 'The Mozilla Team <donate@mozilla.org>';
-const TO_EMAIL = process.env.LARGE_DONATION_EMAIL;
 const LARGE_DONATION_AMOUNT = 115;
 // https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
 const ZERO_DECIMAL_CURRENCIES = [
@@ -38,6 +38,11 @@ update_exchange_rates();
 // update exchange rates every hour
 setInterval(update_exchange_rates, 1000 * 60 * 60);
 
+var to_emails = process.env.LARGE_DONATION_EMAIL;
+if (to_emails) {
+  to_emails = to_emails.split(' ');
+}
+
 module.exports = function(notifier_messager, mailroom) {
 
   return function(event, cb) {
@@ -71,14 +76,16 @@ module.exports = function(notifier_messager, mailroom) {
       </a>
     `;
 
-    notifier_messager.sendMessage({
-      event_type: LUMBERYARD_EVENT,
-      data: {
-        from: FROM_EMAIL,
-        to: TO_EMAIL,
-        subject: 'donate.mozilla.org - A large Stripe charge was generated',
-        html: email
-      }
+    async.each(TO_EMAILS, function(to_email, done) {
+      notifier_messager.sendMessage({
+        event_type: LUMBERYARD_EVENT,
+        data: {
+          from: FROM_EMAIL,
+          to: to_email,
+          subject: 'donate.mozilla.org - A large Stripe charge was generated',
+          html: email
+        }
+      }, done);
     }, cb);
   };
 };
