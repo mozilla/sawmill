@@ -47,7 +47,7 @@ module.exports = function(notifier_messager, mailroom) {
 
   return function(event, cb) {
 
-    if (event.event_type !== 'stripe_charge_succeeded' || !TO_EMAIL) {
+    if (event.event_type !== 'stripe_charge_succeeded' || !to_emails) {
       return process.nextTick(cb);
     }
 
@@ -76,7 +76,7 @@ module.exports = function(notifier_messager, mailroom) {
       </a>
     `;
 
-    async.each(TO_EMAILS, function(to_email, done) {
+    async.each(to_emails, function(to_email, done) {
       notifier_messager.sendMessage({
         event_type: LUMBERYARD_EVENT,
         data: {
