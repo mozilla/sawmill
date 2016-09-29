@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "test": "jstest spec/*_spec.js && lab -t 100"
+    "test": "jstest spec/*_spec.js && lab -t 80"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,6 @@
     "wreck": "^5.2.0"
   },
   "engines": {
-    "node": "4.2.3"
+    "node": "4.6.0"
   }
 }
