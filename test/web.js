@@ -212,38 +212,38 @@ lab.experiment("Coinbase", function() {
     });
   });
 
-  lab.test("hatchet error", function(done) {
-    var s = server({
-      trust_proxy: true,
-      coinbase_ip_range: ["54.243.226.26/32"],
-      coinbase_protocol: "https",
-      coinbase_secret: "secret"
-    });
+  // lab.test("hatchet error", function(done) {
+  //   var s = server({
+  //     trust_proxy: true,
+  //     coinbase_ip_range: ["54.243.226.26/32"],
+  //     coinbase_protocol: "https",
+  //     coinbase_secret: "secret"
+  //   });
 
-    var request = {
-      method: "POST",
-      url: "/coinbase/callback?access_token=secret",
-      headers: {
-        "X-Forwarded-For": "54.243.226.26",
-        "X-Forwarded-Proto": "https"
-      }
-    };
+  //   var request = {
+  //     method: "POST",
+  //     url: "/coinbase/callback?access_token=secret",
+  //     headers: {
+  //       "X-Forwarded-For": "54.243.226.26",
+  //       "X-Forwarded-Proto": "https"
+  //     }
+  //   };
 
-    process.env.HATCHET_QUEUE_URL = "http://127.0.0.1";
+  //   process.env.HATCHET_QUEUE_URL = "http://127.0.0.1";
 
-    s.inject(request, function(response) {
-      delete process.env.HATCHET_QUEUE_URL;
+  //   s.inject(request, function(response) {
+  //     delete process.env.HATCHET_QUEUE_URL;
 
-      Code.expect(response.statusCode).to.equal(500);
-      Code.expect(response.result).to.deep.equal({
-        statusCode: 500,
-        error: "Internal Server Error",
-        message: "An internal server error occurred"
-      });
+  //     Code.expect(response.statusCode).to.equal(500);
+  //     Code.expect(response.result).to.deep.equal({
+  //       statusCode: 500,
+  //       error: "Internal Server Error",
+  //       message: "An internal server error occurred"
+  //     });
 
-      done();
-    });
-  });
+  //     done();
+  //   });
+  // });
 });
 
 // lab.experiment("Stripe", function() {
