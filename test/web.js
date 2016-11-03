@@ -229,7 +229,7 @@ lab.experiment("Coinbase", function() {
       }
     };
 
-    process.env.HATCHET_QUEUE_URL = "http://127.0.0.1";
+    process.env.HATCHET_QUEUE_URL = "http://127.0.0.233";
 
     s.inject(request, function(response) {
       delete process.env.HATCHET_QUEUE_URL;
