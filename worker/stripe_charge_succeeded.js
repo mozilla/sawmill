@@ -55,7 +55,6 @@ module.exports = function(notifier_messager, mailroom) {
 
     var currency_code = event.data.currency.toUpperCase();
     var locale = event.data.customer_object.metadata.locale;
-    var isThunderbirdDonation = event.data.customer_object.metadata.thunderbird;
 
     // If this is a zero decimal currency then use it directly
     // Otherwise divide by 100 to get currency major.minor amount
@@ -69,10 +68,10 @@ module.exports = function(notifier_messager, mailroom) {
     }).format(amount);
 
     var template_name = 'stripe_charge_succeeded_2015';
-    if (localesWith2014Email.indexOf(locale) > -1) {
-      template_name = 'stripe_charge_succeeded_2014';
-    } else if ( event.data.customer_object.metadata.thunderbird ) {
+    if (event.data.customer_object.metadata.thunderbird) {
       template_name = 'thunderbird_donation';
+    } else if (localesWith2014Email.indexOf(locale) > -1) {
+      template_name = 'stripe_charge_succeeded_2014';
     }
 
     debug(`${event.data.id} - ${!!event.data.invoice ? "recurring" : "one-time"} - ${locale} - ${template_name} - ${amount}`);
