@@ -7,6 +7,7 @@ var worker = require("./worker");
 var archiver_config = {
   connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING
 };
+var redis_config = require('redis-url').parse(process.env.REDIS_URL);
 
 var notifier_messager = require("./messager/messager")({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -21,10 +22,10 @@ var catbox,
 if ( process.env.CACHE_ENGINE === "redis" ) {
   catbox = new Catbox.Client(
     new CatboxRedis({
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-      database: process.env.REDIS_DATABASE || 0,
-      password: process.env.REDIS_AUTH,
+      host: redis_config.hostname,
+      port: redis_config.port,
+      database: redis_config.database || 0,
+      password: redis_config.password,
       partition: "sawmill"
     })
   );
