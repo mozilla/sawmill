@@ -11,7 +11,9 @@ module.exports = function(notifier_messager, mailroom) {
       first_name: event.data.first_name,
       github_issue_url: event.data.github_issue_url,
       github_issue_title: event.data.github_issue_title
-    }, "en-US");
+    }, {
+      locale: event.data.locale
+    });
 
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
