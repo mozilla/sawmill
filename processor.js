@@ -4,9 +4,9 @@ var CatboxMemory = require("catbox-memory");
 var CatboxRedis = require("catbox-redis");
 var url = require("url");
 var worker = require("./worker");
-var archiver_config = {
-  connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING
-};
+// var archiver_config = {
+//   connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING
+// };
 var redis_config = require('redis-url').parse(process.env.REDIS_URL);
 
 var notifier_messager = require("./messager/messager")({
@@ -36,7 +36,7 @@ if ( process.env.CACHE_ENGINE === "redis" ) {
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
-  worker.archiver(archiver_config),
+  // worker.archiver(archiver_config),
   worker.backwards_compatibility,
   worker.remind_user_about_event(notifier_messager, mailroom),
   worker.login_request(notifier_messager, mailroom),
