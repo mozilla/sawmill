@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "test": "jstest spec/*_spec.js && lab -t 80"
+    "test": "jstest spec/worker_spec.js && lab -t 80"
   },
   "repository": {
     "type": "git",
