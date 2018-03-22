@@ -1,7 +1,5 @@
 var async = require("async");
-var url = require("url");
 var worker = require("./worker");
-var redis_config = require('redis-url').parse(process.env.REDIS_URL);
 
 var notifier_messager = require("./messager/messager")({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
