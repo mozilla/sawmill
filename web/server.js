@@ -114,7 +114,7 @@ module.exports = async function(config) {
         try {
           customer = await Stripe.customers.retrieve(event.data.object.customer);
         } catch (err) {
-          return Boom.badImplementation("An error occurred while retrieving the customer", retrieve_error);
+          return Boom.badImplementation("An error occurred while retrieving the customer", err);
         }
 
         const { object: charge } = event.data;
