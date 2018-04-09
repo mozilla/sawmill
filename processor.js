@@ -1,13 +1,5 @@
 var async = require("async");
-var Catbox = require("catbox");
-var CatboxMemory = require("catbox-memory");
-var CatboxRedis = require("catbox-redis");
-var url = require("url");
 var worker = require("./worker");
-// var archiver_config = {
-//   connection_string: process.env.WORKER_ARCHIVER_CONNECTION_STRING
-// };
-var redis_config = require('redis-url').parse(process.env.REDIS_URL);
 
 var notifier_messager = require("./messager/messager")({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -16,51 +8,18 @@ var notifier_messager = require("./messager/messager")({
   queueUrl: process.env.OUTGOING_QUEUE_URL
 });
 
-var catbox,
-    ttl = process.env.TTL || 1000 * 60 * 5;
-
-if ( process.env.CACHE_ENGINE === "redis" ) {
-  catbox = new Catbox.Client(
-    new CatboxRedis({
-      host: redis_config.hostname,
-      port: redis_config.port,
-      database: redis_config.database || 0,
-      password: redis_config.password,
-      partition: "sawmill"
-    })
-  );
-} else {
-  catbox = new Catbox.Client(new CatboxMemory());
-}
-
 var mailroom = require('webmaker-mailroom')();
 
 var workers = async.applyEachSeries([
-  // worker.archiver(archiver_config),
   worker.backwards_compatibility,
-  worker.remind_user_about_event(notifier_messager, mailroom),
+  worker.send_post_request,
   worker.login_request(notifier_messager, mailroom),
-  worker.send_sms(notifier_messager, catbox, ttl),
   worker.stripe_charge_succeeded(notifier_messager, mailroom),
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
-  worker.send_event_host_email(notifier_messager, mailroom),
-  worker.send_mofo_staff_email(notifier_messager, mailroom, process.env.MOFO_STAFF_EMAIL),
   worker.send_new_user_email(notifier_messager, mailroom, process.env.TEACH_CLIENT_ID),
-  worker.event_mentor_confirmation_email(notifier_messager, mailroom),
-  worker.event_coorganizer_added(notifier_messager, mailroom),
-  // disabled due to spam (https://bugzilla.mozilla.org/show_bug.cgi?id=1346003)
-  // worker.sign_up_for_webmaker_mailing_list(notifier_messager),
-  worker.badge_awarded_send_email(notifier_messager),
-  worker.badge_application_denied(notifier_messager, mailroom),
-  worker.hive_badge_awarded(notifier_messager, mailroom),
-  worker.mozfest_session_proposal(notifier_messager, mailroom),
-  worker.mozfest_session_proposal_2016(notifier_messager, mailroom),
   worker.mozfest_session_proposal_2017(notifier_messager, mailroom),
-  worker.suggest_featured_resource(notifier_messager, process.env.SFR_SPREADSHEET, process.env.SFR_WORKSHEET),
-  worker.send_post_request,
-  worker.large_stripe_charge(notifier_messager, mailroom),
-  worker.opendataday_petition_signup
+  worker.large_stripe_charge(notifier_messager, mailroom)
 ]);
 
 var SQSProcessor = require('sqs-processor');
@@ -71,19 +30,13 @@ var queue = new SQSProcessor({
   queueUrl: process.env.INCOMING_QUEUE_URL
 });
 
-catbox.start(function startProcessor(catbox_error) {
-  if (catbox_error) {
-    throw catbox_error;
-  }
-
-  queue.startPolling(function(message, poll_callback) {
-    workers(message, function(worker_error) {
-      poll_callback(worker_error);
-    });
-  }, function(poll_error) {
-    console.log(poll_error);
-    console.log(poll_error.stack);
+queue.startPolling(function(message, poll_callback) {
+  workers(message, function(worker_error) {
+    poll_callback(worker_error);
   });
+}, function(poll_error) {
+  console.log(poll_error);
+  console.log(poll_error.stack);
 });
 
 var shutdown_handler = function() {
