@@ -68,7 +68,8 @@ module.exports = function(notifier_messager, mailroom) {
     }).format(amount);
 
     let template_name = 'stripe_charge_succeeded_2015';
-    if (event.data.customer_object.metadata.thunderbird) {
+    const isThunderbird = event.data.customer_object.metadata.thunderbird;
+    if (isThunderbird) {
       template_name = 'thunderbird_donation';
     } else if (localesWith2014Email.indexOf(locale) > -1) {
       template_name = 'stripe_charge_succeeded_2014';
@@ -78,23 +79,30 @@ module.exports = function(notifier_messager, mailroom) {
 
     const livemode = event.data.livemode;
 
+    // If there's an invoice attached to this charge, then it's a subscription
+    const recurring = !!event.data.invoice;
+
     const email = mailroom.render(template_name, {
       livemode,
       amount,
-      // If there's an invoice attached to this charge, then it's a subscription
-      recurring_donation: !!event.data.invoice,
+      recurring_donation: recurring,
       transaction_id: event.data.id,
       timestamp: new Date(event.data.created * 1000).toISOString()
     }, {
       locale: locale
     });
 
+    let subject = email.subject;
+    if (!isThunderbird && recurring) {
+      subject = email.recurringSubject;
+    }
+
     notifier_messager.sendMessage({
       event_type: LUMBERYARD_EVENT,
       data: {
         from: FROM_EMAIL,
         to: event.data.customer_object.email,
-        subject: email.subject,
+        subject: subject,
         html: email.html,
         livemode
       }
