@@ -17,7 +17,6 @@ var workers = async.applyEachSeries([
   worker.stripe_charge_succeeded(notifier_messager, mailroom),
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
-  worker.send_new_user_email(notifier_messager, mailroom, process.env.TEACH_CLIENT_ID),
   worker.mozfest_session_proposal_2018(notifier_messager, mailroom),
   worker.large_stripe_charge(notifier_messager, mailroom)
 ]);
