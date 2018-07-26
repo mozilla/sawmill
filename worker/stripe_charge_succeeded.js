@@ -93,7 +93,7 @@ module.exports = function(notifier_messager, mailroom) {
     });
 
     let subject = email.subject;
-    if (!isThunderbird && recurring) {
+    if (recurring) {
       subject = email.recurringSubject;
     }
 
