@@ -1,5 +1,5 @@
 module.exports = function(notifier_messager, mailroom, teach_client_id) {
-  var LUMBERYARD_EVENT = "mailer";
+  var MAILER_EVENT = "mailer";
   var FROM_EMAIL = 'Webmaker <help@webmaker.org>';
 
   if (!teach_client_id) {
@@ -20,7 +20,7 @@ module.exports = function(notifier_messager, mailroom, teach_client_id) {
     }, {locale: event.data.locale});
 
     notifier_messager.sendMessage({
-      event_type: LUMBERYARD_EVENT,
+      event_type: MAILER_EVENT,
       data: {
         from: FROM_EMAIL,
         to: event.data.email,

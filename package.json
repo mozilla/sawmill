@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jbuck/sawmill.git"
+    "url": "git://github.com/mozilla/sawmill.git"
   },
   "author": "",
   "license": "MPL-2.0",
   "dependencies": {
     "async": "^2.6.0",
-    "aws-sdk": "^2.212.1",
+    "aws-sdk": "^2.282.1",
     "boom": "^7.2.0",
     "debug": "^3.1.0",
     "forwarded-for": "^1.0.1",
@@ -25,6 +25,8 @@
     "joi": "^13.1.2",
     "money": "^0.2.0",
     "netmask": "^1.0.6",
+    "nodemailer": "^4.6.3",
+    "nodemailer-ses-transport": "^1.5.1",
     "open-exchange-rates": "^0.3.0",
     "request": "^2.85.0",
     "sqs-processor": "^2.0.0",

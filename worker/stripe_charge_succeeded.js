@@ -44,7 +44,7 @@ const localesWith2014Email = [
 var debug = require("debug")("worker:stripe_charge_succeeded");
 
 module.exports = function(notifier_messager, mailroom) {
-  const LUMBERYARD_EVENT = 'mailer';
+  const MAILER_EVENT = 'mailer';
   const FROM_EMAIL = 'The Mozilla Team <donate@mozilla.org>';
 
   return function(event, cb) {
@@ -90,7 +90,7 @@ module.exports = function(notifier_messager, mailroom) {
     });
 
     notifier_messager.sendMessage({
-      event_type: LUMBERYARD_EVENT,
+      event_type: MAILER_EVENT,
       data: {
         from: FROM_EMAIL,
         to: event.data.customer_object.email,

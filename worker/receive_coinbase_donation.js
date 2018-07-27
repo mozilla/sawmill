@@ -1,5 +1,5 @@
 module.exports = function(notifier_messager, mailroom) {
-  var LUMBERYARD_EVENT = 'mailer';
+  var MAILER_EVENT = 'mailer';
   var FROM_EMAIL = 'Mark Surman, Mozilla.org <joinmozilla@mozilla.org>';
 
   return function(event, cb) {
@@ -41,7 +41,7 @@ module.exports = function(notifier_messager, mailroom) {
     }, event.data.locale);
 
     notifier_messager.sendMessage({
-      event_type: LUMBERYARD_EVENT,
+      event_type: MAILER_EVENT,
       data: {
         from: FROM_EMAIL,
         to: event.data.customer.email,
