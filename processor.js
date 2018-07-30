@@ -5,7 +5,7 @@ var notifier_messager = require("./messager/messager")({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_QUEUE_REGION,
-  queueUrl: process.env.OUTGOING_QUEUE_URL
+  queueUrl: process.env.QUEUE_URL
 });
 
 var mailroom = require('webmaker-mailroom')();
@@ -18,7 +18,8 @@ var workers = async.applyEachSeries([
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
   worker.mozfest_session_proposal_2018(notifier_messager, mailroom),
-  worker.large_stripe_charge(notifier_messager, mailroom)
+  worker.large_stripe_charge(notifier_messager, mailroom),
+  worker.mailer
 ]);
 
 var SQSProcessor = require('sqs-processor');
@@ -26,7 +27,7 @@ var queue = new SQSProcessor({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_QUEUE_REGION,
-  queueUrl: process.env.INCOMING_QUEUE_URL
+  queueUrl: process.env.QUEUE_URL
 });
 
 queue.startPolling(function(message, poll_callback) {

@@ -1,5 +1,5 @@
 const async = require('async');
-const LUMBERYARD_EVENT = 'mailer';
+const MAILER_EVENT = 'mailer';
 const FROM_EMAIL = 'The Mozilla Team <donate@mozilla.org>';
 const LARGE_DONATION_AMOUNT = 115;
 // https://support.stripe.com/questions/which-zero-decimal-currencies-does-stripe-support
@@ -78,7 +78,7 @@ module.exports = function(notifier_messager, mailroom) {
 
     async.each(to_emails, function(to_email, done) {
       notifier_messager.sendMessage({
-        event_type: LUMBERYARD_EVENT,
+        event_type: MAILER_EVENT,
         data: {
           from: FROM_EMAIL,
           to: to_email,
