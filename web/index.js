@@ -2,8 +2,7 @@ const {
   HOST: host,
   PORT: port,
   COINBASE_PROTOCOL: coinbase_protocol,
-  COINBASE_SECRET: coinbase_secret,
-  STRIPE_SECRET: stripe_secret
+  COINBASE_SECRET: coinbase_secret
 } = process.env;
 
 let {
@@ -20,8 +19,7 @@ const config = {
   trust_proxy,
   coinbase_ip_range,
   coinbase_protocol,
-  coinbase_secret,
-  stripe_secret
+  coinbase_secret
 };
 
 async function startWebServer() {

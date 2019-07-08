@@ -14,11 +14,9 @@ var workers = async.applyEachSeries([
   worker.backwards_compatibility,
   worker.send_post_request,
   worker.login_request(notifier_messager, mailroom),
-  worker.stripe_charge_succeeded(notifier_messager, mailroom),
   worker.receive_coinbase_donation(notifier_messager, mailroom),
   worker.reset_request(notifier_messager, mailroom),
   worker.mozfest_session_proposal_2018(notifier_messager, mailroom),
-  worker.large_stripe_charge(notifier_messager, mailroom),
   worker.mailer
 ]);
 
