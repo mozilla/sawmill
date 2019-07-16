@@ -5,14 +5,12 @@ const Hapi = require("hapi");
 const HapiAuthBearerToken = require("hapi-auth-bearer-token");
 const hatchet = require("hatchet");
 const Netmask = require("netmask").Netmask;
-const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = async function(config) {
   const {
     trust_proxy,
     coinbase_protocol,
     coinbase_secret,
-    stripe_secret,
     port,
     host
   } = config;
@@ -26,8 +24,7 @@ module.exports = async function(config) {
       trust_proxy,
       coinbase_ip_range,
       coinbase_protocol,
-      coinbase_secret,
-      stripe_secret
+      coinbase_secret
     },
     host,
     port
@@ -41,16 +38,6 @@ module.exports = async function(config) {
       validate: async(request, token) => {
         return {
           isValid: token === request.server.settings.app.coinbase_secret,
-          credentials: { token }
-        };
-      }
-    });
-
-    server.auth.strategy("stripe", "bearer-access-token", {
-      allowQueryToken: true,
-      validate: async(request, token) => {
-        return {
-          isValid: token === request.server.settings.app.stripe_secret,
           credentials: { token }
         };
       }
@@ -91,42 +78,6 @@ module.exports = async function(config) {
             }
 
             resolve(h.response(`queued message with id ${data.MessageId}`).state(200));
-          });
-        });
-      }
-    });
-
-    server.route({
-      method: "POST",
-      path: "/stripe/callback",
-      config: {
-        auth: "stripe"
-      },
-      handler: async function(request, h) {
-        const event = request.payload;
-
-        debug("received stripe event %j", event);
-
-        if (event.type !== "charge.succeeded") {
-          return h.response("Event type not implemented").code(200);
-        }
-
-        try {
-          customer = await Stripe.customers.retrieve(event.data.object.customer);
-        } catch (err) {
-          return Boom.badImplementation("An error occurred while retrieving the customer", err);
-        }
-
-        const { object: charge } = event.data;
-        charge.customer_object = customer;
-
-        return new Promise((resolve, reject) => {
-          hatchet.send("stripe_charge_succeeded", charge, function(hatchet_error, data) {
-            if (hatchet_error) {
-              return reject(Boom.badImplementation("An error occurred while sending a message", hatchet_error));
-            }
-
-            resolve(h.response(`queued message with id ${data.MessageId}`));
           });
         });
       }
